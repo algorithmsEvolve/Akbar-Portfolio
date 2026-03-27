@@ -1,0 +1,97 @@
+/* ========================================
+   SOCIAL SIDEBAR
+   ======================================== */
+.sidebar {
+  position: fixed;
+  right: 80px;
+  bottom: 80px;
+  z-index: var(--z-social);
+}
+
+.socialList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  color: var(--color-social-icon);
+  transition: color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.socialLink:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.1);
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialImage {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.socialLink:hover .socialImage {
+  opacity: 1;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+  .sidebar {
+    right: 24px;
+  }
+
+  .socialLink {
+    width: 48px;
+    height: 48px;
+  }
+
+  .socialImage {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    transform: none;
+    background-color: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 0;
+  }
+
+  .socialList {
+    flex-direction: row;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .socialLink {
+    width: 44px;
+    height: 44px;
+  }
+}

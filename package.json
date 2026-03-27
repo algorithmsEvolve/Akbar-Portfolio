@@ -11,7 +11,9 @@
   "dependencies": {
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dat-gui": "^4.1.1",
+    "react-dom": "19.2.3",
+    "webgl-fluid": "^0.3.9"
   },
   "devDependencies": {
     "babel-plugin-react-compiler": "1.0.0",

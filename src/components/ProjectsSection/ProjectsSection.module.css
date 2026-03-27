@@ -1,0 +1,463 @@
+/* =============================================
+   OUTER WRAPPER
+   Tall container that provides scroll distance.
+   The sticky inner panel rides within it.
+   ============================================= */
+.sectionOuter {
+  position: relative;
+  /* height is set inline via JS: (PROJECTS.length - 1) * STEP_HEIGHT + 100vh */
+  z-index: 2;
+}
+
+/* =============================================
+   STICKY INNER SECTION
+   Fixed to viewport while user scrolls outer.
+   ============================================= */
+.sectionSticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px var(--section-padding-x) 32px;
+  color: white;
+  overflow: hidden;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.subtitle {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 56px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  letter-spacing: 0.04em;
+}
+
+.titleHighlight {
+  font-style: italic;
+  background: linear-gradient(180deg, #9cbcc9 0%, #466e82 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* =============================================
+   CONTENT WRAPPER (two-column layout)
+   ============================================= */
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* vertically center both panels */
+  gap: 60px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  min-height: 0;
+}
+
+/* =============================================
+   LEFT PANEL — project info (sticky behavior
+   inherited from parent sectionSticky)
+   ============================================= */
+.leftPanel {
+  flex: 0 0 400px;
+  height: 50vh;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-self: center;
+}
+
+/* Left Content - project details */
+.projectInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.projectInfoTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.projectTitle {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.atomicIcon {
+  width: 36px;
+  height: 36px;
+  color: #5ba3c9;
+  flex-shrink: 0;
+}
+
+.projectContentBody {
+  padding-left: 52px;
+}
+
+.projectDesc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.highlightItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.highlightIcon {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0px;
+}
+
+.stacksContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stackBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  padding: 6px 14px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.stackBadge:hover {
+  background: rgba(91, 163, 201, 0.1);
+  border-color: #5ba3c9;
+}
+
+.stackIcon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.stackName {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* =============================================
+   FADE TRANSITION (shared by left & right)
+   key={activeProject.id} triggers remount →
+   animation replays on every project change
+   ============================================= */
+.fadeLeftUp {
+  animation: slideTextUp 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+.fadeLeftDown {
+  animation: slideTextDown 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+.fadeGridUp {
+  animation: scrollGridUp 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+  width: 100%;
+}
+
+.fadeGridDown {
+  animation: scrollGridDown 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+  width: 100%;
+}
+
+@keyframes slideTextUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideTextDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollGridUp {
+  /* user scrolled down, content moves up from bottom */
+  from { opacity: 0; transform: translateY(calc(100% + 24px)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollGridDown {
+  /* user scrolled up, content moves down from top */
+  from { opacity: 0; transform: translateY(calc(-100% - 24px)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   TIMELINE
+   ============================================= */
+.timeline {
+  width: 4px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  border-radius: 4px;
+}
+
+.timelineLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(91, 163, 201, 0) 0%, #5ba3c9 100%);
+  border-radius: 4px;
+  transition: height 0.1s linear;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #5ba3c9;
+  box-shadow: 0 0 10px #5ba3c9, 0 0 20px #5ba3c9;
+  z-index: 2;
+  transition: top 0.1s linear;
+  transform: translateY(-50%); /* Center the dot at top: N%, not top-edge */
+}
+
+.timelineGlow {
+  position: absolute;
+  left: -50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(91, 163, 201, 0.35) 0%, rgba(91, 163, 201, 0) 65%);
+  pointer-events: none;
+  z-index: 1;
+  transition: top 0.1s linear;
+  transform: translateY(-50%); /* Center the glow at top: N%, matching the dot center */
+}
+
+/* =============================================
+   RIGHT PANEL — image grid
+   Also driven by activeIndex (same as left)
+   ============================================= */
+.rightPanel {
+  flex: 1;
+  width: 0; /* flex-basis override so flex: 1 distributes correctly */
+  min-width: 0; 
+  display: flex;
+  align-items: center;
+  align-self: center;
+  position: relative;
+}
+
+.shadowGrid {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  /* Removed blur and opacity, letting mask-image handle the "glass reflection" fade */
+}
+
+.shadowPrev {
+  transform: translateY(calc(-150% - 24px));
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
+}
+
+.shadowNext {
+  transform: translateY(calc(50% + 24px));
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%);
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 195px 195px;
+  gap: 16px;
+  width: 100%;
+}
+
+.imgBox {
+  background: #d9d9d9;
+  border-radius: 16px;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.imgBox:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+}
+
+.imgTopLeft {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.imgBottomLeft {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.imgMain {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+/* =============================================
+   SEE MORE BUTTON
+   ============================================= */
+.seeMoreContainer {
+  position: absolute;
+  top: calc(100% + 30px);
+  left: 0;
+  z-index: 10;
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+.showButton {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.hideButton {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+.seeMoreBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  padding: 14px 32px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+              border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+              transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+              box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.seeMoreBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 1024px) {
+  .contentWrapper {
+    flex-direction: column;
+    gap: 40px;
+    overflow-y: auto;
+  }
+
+  .leftPanel {
+    position: relative;
+    top: 0;
+    width: 100%;
+    flex: none;
+    height: auto;
+    flex-direction: column-reverse;
+  }
+
+  .timeline {
+    display: none;
+  }
+
+  .rightPanel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionSticky {
+    justify-content: flex-start;
+    padding-top: 80px;
+    overflow-y: auto;
+  }
+
+  .title { font-size: 40px; }
+
+  .imageGrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 16px;
+  }
+
+  .imgMain {
+    grid-column: 1;
+    grid-row: 1;
+    height: 240px;
+  }
+
+  .imgTopLeft {
+    grid-column: 1;
+    grid-row: 2;
+    height: 180px;
+  }
+
+  .imgBottomLeft {
+    grid-column: 1;
+    grid-row: 3;
+    height: 180px;
+  }
+}

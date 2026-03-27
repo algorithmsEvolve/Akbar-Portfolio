@@ -1,0 +1,214 @@
+.main {
+  min-height: 100vh;
+  background-color: #050505;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.header {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.logoContainer, .headerSpacer {
+  width: 120px;
+  display: flex;
+}
+
+.logoImage {
+  object-fit: contain;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 24px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  transition: background 0.2s, border-color 0.2s;
+  text-decoration: none;
+}
+
+.backBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* =============================================
+   CONTENT
+   ============================================= */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 60px 5%;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* =============================================
+   PROJECT CARD
+   ============================================= */
+.projectCard {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border-color: rgba(91, 163, 201, 0.3);
+}
+
+/* Internal Grid for Images */
+.imageGrid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  cursor: pointer;
+}
+
+.imgBox {
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.imgTopLeft {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.imgBottomLeft {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.imgMain {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+/* Info Section */
+.projectInfo {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.projectTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.atomicIcon {
+  width: 24px;
+  height: 24px;
+  color: #5ba3c9;
+}
+
+.projectTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.bottomSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+.stacksContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.stackBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 99px;
+}
+
+.stackIcon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.stackName {
+  font-size: 11px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+/* Action Button */
+.linkArrowBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s, transform 0.2s;
+  padding: 0;
+  margin-left: 16px;
+}
+
+.projectCard:hover .linkArrowBtn {
+  opacity: 1;
+  color: #5ba3c9;
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .projectsGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
