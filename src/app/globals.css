@@ -41,8 +41,8 @@
   /* Z-index layers */
   --z-watermark: 0;
   --z-content: 1;
-  --z-social: 10;
-  --z-navbar: 100;
+  --z-social: 999;
+  --z-navbar: 1000;
 }
 
 /* ========================================
@@ -151,8 +151,15 @@ button {
    GLOBAL COMPONENT OVERRIDES
    ======================================== */
 body.hide-rainbow-cursor #rainbow-cursor-container,
-body:has(.hide-cursor-hover:hover) #rainbow-cursor-container {
+body:has(.hide-cursor-hover:hover) #rainbow-cursor-container,
+body.lightbox-open #rainbow-cursor-container {
   opacity: 0 !important;
   visibility: hidden;
   transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+body.lightbox-open header,
+body.lightbox-open aside,
+body.lightbox-open [class*="sidebar"] {
+  display: none !important;
 }

@@ -84,8 +84,9 @@
    inherited from parent sectionSticky)
    ============================================= */
 .leftPanel {
-  flex: 0 0 400px;
-  height: 50vh;
+  flex: 0 0 480px;
+  height: 65vh; /* Fixed height to give timeline a clear reference */
+  min-height: 500px;
   display: flex;
   flex-direction: row;
   gap: 40px;
@@ -98,12 +99,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  /* Removed overflow: hidden to prevent cutting off tech stacks */
 }
 
 .projectInfoTitleWrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -123,6 +124,9 @@
 
 .projectContentBody {
   padding-left: 52px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .projectDesc {
@@ -130,14 +134,14 @@
   line-height: 1.6;
   color: var(--color-text-secondary);
   font-weight: 400;
-  margin-bottom: 24px;
+  margin-bottom: 20px; /* Reduced from 24px */
 }
 
 .highlights {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 32px;
+  gap: 6px; /* Reduced from 8px */
+  margin-bottom: 24px; /* Reduced from 32px */
 }
 
 .highlightItem {
@@ -320,7 +324,7 @@
   width: 100%;
   background: linear-gradient(to bottom, rgba(91, 163, 201, 0) 0%, #5ba3c9 100%);
   border-radius: 4px;
-  transition: height 0.1s linear;
+  /* Removed transition to avoid conflict with requestAnimationFrame updates */
 }
 
 .timelineDot {
@@ -332,7 +336,7 @@
   background-color: #5ba3c9;
   box-shadow: 0 0 10px #5ba3c9, 0 0 20px #5ba3c9;
   z-index: 2;
-  transition: top 0.1s linear;
+  /* Removed transition to avoid conflict with requestAnimationFrame updates */
   transform: translateY(-50%); /* Center the dot at top: N%, not top-edge */
 }
 
@@ -345,7 +349,7 @@
   background: radial-gradient(circle, rgba(91, 163, 201, 0.35) 0%, rgba(91, 163, 201, 0) 65%);
   pointer-events: none;
   z-index: 1;
-  transition: top 0.1s linear;
+  /* Removed transition to avoid conflict with requestAnimationFrame updates */
   transform: translateY(-50%); /* Center the glow at top: N%, matching the dot center */
 }
 
@@ -393,16 +397,31 @@
 }
 
 .imgBox {
-  background: #d9d9d9;
+  background: #1a242d;
   border-radius: 16px;
   width: 100%;
   height: 100%;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .imgBox:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  border-color: rgba(91, 163, 201, 0.4);
+}
+
+.projectImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+.imgBox:hover .projectImage {
+  transform: scale(1.1);
 }
 
 .imgTopLeft {
@@ -528,4 +547,201 @@
     grid-row: 3;
     height: 180px;
   }
+}
+/* =============================================
+   LIGHTBOX / IMAGE VIEWER
+   ============================================= */
+.lightboxOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* 50% opacity as requested */
+  backdrop-filter: blur(12px); /* Premium blur effect */
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 999999; /* Highest possible layer to cover header/navbar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+body.lightbox-open header,
+body.lightbox-open aside,
+body.lightbox-open [class*="sidebar"] {
+  display: none !important;
+}
+
+.lightboxContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.lightboxImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 80px 100px 180px; /* Large padding to keep image smaller and clear of buttons/footer */
+}
+
+.lightboxImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  will-change: transform;
+}
+
+.closeBtn, .navBtn {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.6); /* Darker background for visibility */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10001;
+}
+
+.zoomBtn {
+  position: relative;
+  width: 36px !important;
+  height: 36px !important;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.zoomBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.closeBtn:hover, .navBtn:hover, .zoomBtn:hover {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: #5ba3c9;
+  transform: scale(1.1);
+}
+
+.closeBtn {
+  top: 20px;
+  right: 20px;
+  position: fixed;
+  z-index: 10002;
+}
+
+.prevBtn {
+  left: 20px;
+}
+
+.nextBtn {
+  right: 20px;
+}
+
+.lightboxFooter {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+  z-index: 10005;
+}
+
+.thumbnailStrip {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
+}
+
+.thumbnailItem {
+  width: 60px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.thumbnailItem:hover {
+  opacity: 1;
+  transform: translateY(-4px);
+}
+
+.thumbnailItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.activeThumbnail {
+  border-color: #5ba3c9;
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(91, 163, 201, 0.5);
+}
+
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zoomLevel {
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+  min-width: 40px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .navBtn {
+    width: 40px;
+    height: 40px;
+  }
+  .prevBtn { left: 10px; }
+  .nextBtn { right: 10px; }
+  .closeBtn { top: 20px; right: 20px; }
 }

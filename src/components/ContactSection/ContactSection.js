@@ -15,7 +15,7 @@ export default function ContactSection() {
           <div className={styles.infoGrid}>
             <div className={styles.infoBlock}>
               <span className={styles.infoLabel}>Email :</span>
-              <a href="mailto:email@gmail.com" className={styles.infoValue}>email@gmail.com</a>
+              <a href="mailto:akbarriski9404@gmail.com" className={styles.infoValue}>akbarriski9404@gmail.com</a>
             </div>
             <div className={styles.infoBlock}>
               <span className={styles.infoLabel}>Location :</span>
@@ -25,16 +25,16 @@ export default function ContactSection() {
         </div>
 
         <div className={styles.socialsContainer}>
-          <a href="#" className={styles.socialLink}>
-            <img src="/icon-gitlab-final.png" className={styles.socialIcon} alt="Gitlab" />
+          <a href="https://gitlab.com/algorithmsEvolve" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <img src="/images/gitlab-icon.png" className={styles.socialIcon} alt="Gitlab" />
             <span className={styles.socialText}>Gitlab</span>
           </a>
-          <a href="#" className={styles.socialLink}>
-            <img src="/icon-github-final.png" className={styles.socialIcon} alt="Github" />
+          <a href="https://github.com/algorithmsEvolve" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <img src="/images/github-icon.png" className={styles.socialIcon} alt="Github" />
             <span className={styles.socialText}>Github</span>
           </a>
-          <a href="#" className={styles.socialLink}>
-            <img src="/icon-linkedin-final.png" className={styles.socialIcon} alt="Linkedin" />
+          <a href="https://www.linkedin.com/in/akbar-riski/" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <img src="/images/linkedin-icon.png" className={styles.socialIcon} alt="Linkedin" />
             <span className={styles.socialText}>Linkedin</span>
           </a>
         </div>

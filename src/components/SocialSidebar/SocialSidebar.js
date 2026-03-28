@@ -8,19 +8,19 @@ const SOCIAL_LINKS = [
   {
     id: "gitlab",
     label: "GitLab",
-    href: "https://gitlab.com/",
+    href: "https://gitlab.com/algorithmsEvolve",
     icon: "/images/gitlab-icon.png",
   },
   {
     id: "github",
     label: "GitHub",
-    href: "https://github.com/",
+    href: "https://github.com/algorithmsEvolve",
     icon: "/images/github-icon.png",
   },
   {
     id: "linkedin",
     label: "LinkedIn",
-    href: "https://linkedin.com/",
+    href: "https://www.linkedin.com/in/akbar-riski/",
     icon: "/images/linkedin-icon.png",
   },
 ];
