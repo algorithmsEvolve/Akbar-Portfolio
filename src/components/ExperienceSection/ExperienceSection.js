@@ -15,14 +15,14 @@ const EXPERIENCES = [
     id: 3,
     year: "2021 - Present",
     role: "Founder & Creative Lead",
-    company: "Momento Project",
+    company: "Momento Project · Founder",
     description: "Momento Project is where my love for tech meets my artistic side. Since 2021, I've been obsessing over creating wedding invitations that aren't just digital—they're flawless experiences with an aesthetic edge. We also craft handcrafted gifts (seserahan & mahar), because I believe the best products always blend high-tech with a high-touch, human feel.",
   },
   {
     id: 2,
     year: "2022 - Present",
-    role: "Freelance Fullstack Developer",
-    company: "PT. Inovasi Digital Sadadjiwa (IDS)",
+    role: "Fullstack Developer",
+    company: "PT. Inovasi Digital Sadadjiwa (IDS) · Freelance",
     description: "Since 2022, I've been geeking out with the crew at IDS as a freelance dev. I'm all about pushing the limits with the latest tech stacks and AI-driven optimizations. From startups to government projects, I take pride in providing tailored, high-performance solutions that actually solve real-world headaches for my clients.",
   },
 ];
