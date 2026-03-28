@@ -15,12 +15,20 @@ export default function ProjectsSection() {
   const [dotProgress, setDotProgress] = useState(0);
   const [scrollDir, setScrollDir] = useState("down");
 
-  // Ref to avoid stale closure in scroll handler
   const activeIndexRef = useRef(0);
-  // Ref to the outer tall wrapper — scroll position is read from this
   const outerRef = useRef(null);
+  
+  // High-performance refs for direct DOM manipulation
+  const projectsContainerRef = useRef(null);
+  const cardRefs = useRef([]);
+  const timelineLineRef = useRef(null);
+  const timelineDotRef = useRef(null);
+  const timelineGlowRef = useRef(null);
 
-  // Keep ref in sync with state
+  // Smooth scroll interpolation refs
+  const targetScrollRef = useRef(0);
+  const currentScrollRef = useRef(0);
+
   useEffect(() => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
@@ -28,40 +36,79 @@ export default function ProjectsSection() {
   useEffect(() => {
     let animationFrameId;
 
-    const handleScroll = () => {
-      animationFrameId = requestAnimationFrame(() => {
-        if (!outerRef.current) return;
+    const updateStyles = (clamped, totalRange) => {
+      // 1. Update Right Panel Container
+      if (projectsContainerRef.current) {
+        projectsContainerRef.current.style.transform = `translateY(${-clamped}px)`;
+      }
 
-        const rect = outerRef.current.getBoundingClientRect();
-        // How far the user has scrolled into this section (negative rect.top means scrolled in)
-        const scrolledIn = -rect.top;
-
-        // Total scrollable range: from first project to last project
-        const totalRange = STEP_HEIGHT * (PROJECTS.length - 1);
-
-        // Clamp to [0, totalRange]
-        const clamped = Math.max(0, Math.min(totalRange, scrolledIn));
-
-        // Active index: which "step" we're on
-        const newActiveIndex = Math.min(
-          PROJECTS.length - 1,
-          Math.floor(clamped / STEP_HEIGHT)
-        );
-
-        // Dot progress: 0 at first project, 1 at last
-        const newDotProgress = totalRange > 0 ? clamped / totalRange : 0;
-
-        if (newActiveIndex !== activeIndexRef.current) {
-          setScrollDir(newActiveIndex > activeIndexRef.current ? "down" : "up");
-          setActiveIndex(newActiveIndex);
-        }
-        setDotProgress(newDotProgress);
+      // 2. Update Each Card (Scaling & Opacity)
+      cardRefs.current.forEach((card, idx) => {
+        if (!card) return;
+        const projectStart = idx * STEP_HEIGHT;
+        const distance = clamped - projectStart;
+        const normalizedDistance = Math.abs(distance) / STEP_HEIGHT;
+        
+        const scale = Math.max(0.8, 1 - normalizedDistance * 0.2);
+        const opacity = Math.max(0, 1 - Math.pow(normalizedDistance, 1.5));
+        
+        card.style.transform = `scale(${scale})`;
+        card.style.opacity = opacity;
       });
+
+      // 3. Update Timeline (Directly)
+      const progress = totalRange > 0 ? clamped / totalRange : 0;
+      const progressPercent = `${progress * 100}%`;
+      
+      if (timelineLineRef.current) timelineLineRef.current.style.height = progressPercent;
+      if (timelineDotRef.current) timelineDotRef.current.style.top = progressPercent;
+      if (timelineGlowRef.current) timelineGlowRef.current.style.top = progressPercent;
+
+      return progress;
+    };
+
+    const renderLoop = () => {
+      const lerp = (start, end, factor) => start + (end - start) * factor;
+      
+      // Interpolate position - 0.1 is very smooth/slow, 0.2 is faster
+      currentScrollRef.current = lerp(currentScrollRef.current, targetScrollRef.current, 0.1);
+      
+      const totalRange = STEP_HEIGHT * (PROJECTS.length - 1);
+      
+      // Update visual styles
+      const newProgress = updateStyles(currentScrollRef.current, totalRange);
+
+      // Handle activeIndex changes (re-render only when project changes)
+      // Use currentScrollRef to sync text change with visual position
+      const newActiveIndex = Math.min(
+        PROJECTS.length - 1,
+        Math.floor((currentScrollRef.current + STEP_HEIGHT / 2) / STEP_HEIGHT)
+      );
+
+      if (newActiveIndex !== activeIndexRef.current) {
+        setScrollDir(newActiveIndex > activeIndexRef.current ? "down" : "up");
+        setActiveIndex(newActiveIndex);
+        setDotProgress(newProgress);
+      }
+
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
+
+    const handleScroll = () => {
+      if (!outerRef.current) return;
+      const rect = outerRef.current.getBoundingClientRect();
+      const currentScrolledIn = -rect.top;
+      const totalRange = STEP_HEIGHT * (PROJECTS.length - 1);
+      
+      // We only update the TARGET here. The renderLoop handles the movement.
+      targetScrollRef.current = Math.max(0, Math.min(totalRange, currentScrolledIn));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
-    handleScroll(); // Initial call to set correct state
+    
+    // Start continuous animation loop
+    animationFrameId = requestAnimationFrame(renderLoop);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -73,15 +120,12 @@ export default function ProjectsSection() {
   const activeProject = PROJECTS[activeIndex];
 
   return (
-    // Outer wrapper: tall enough to give scroll distance for all project transitions
-    // +100vh so the sticky panel is fully in view before/after transitions
     <div
       ref={outerRef}
       id="projects"
       className={styles.sectionOuter}
       style={{ height: `calc(${(PROJECTS.length - 1) * STEP_HEIGHT + TRAILING_HEIGHT}px + 100vh)` }}
     >
-      {/* Inner sticky panel — stays fixed while user scrolls through outerRef */}
       <section className={styles.sectionSticky}>
 
         <div className={styles.header}>
@@ -91,94 +135,102 @@ export default function ProjectsSection() {
 
         <div className={styles.contentWrapper}>
 
-          {/* Left Sticky Column — project info */}
+          {/* Left Sticky Column */}
           <div className={styles.leftPanel}>
             <div className={styles.projectInfo}>
               <div key={activeProject.id} className={`${styles.fadeContent} ${scrollDir === "down" ? styles.fadeLeftUp : styles.fadeLeftDown}`}>
                 <div className={styles.projectInfoTitleWrapper}>
-                  {/* Atomic icon */}
-                  <svg className={styles.atomicIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg 
+                    className={`${styles.atomicIcon} ${styles.bubbleFadeRight}`} 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    style={{ animationDelay: "0s" }}
+                  >
                     <circle cx="12" cy="12" r="3"></circle>
                     <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
                     <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)"></ellipse>
                     <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)"></ellipse>
                   </svg>
-                  <h3 className={styles.projectTitle}>{activeProject.title}</h3>
+                  <h3 
+                    className={`${styles.projectTitle} ${styles.bubbleFadeLeft}`}
+                    style={{ animationDelay: "0.1s" }}
+                  >
+                    {activeProject.title}
+                  </h3>
                 </div>
 
                 <div className={styles.projectContentBody}>
-                  <p className={styles.projectDesc}>{activeProject.description}</p>
-
+                  <p 
+                    className={`${styles.projectDesc} ${styles.staggerFadeIn}`}
+                    style={{ animationDelay: "0.4s" }}
+                  >
+                    {activeProject.description}
+                  </p>
                   <div className={styles.highlights}>
                     {activeProject.highlights.map((highlight, idx) => (
-                      <div key={idx} className={styles.highlightItem}>
+                      <div 
+                        key={`${activeProject.id}-${idx}`} 
+                        className={`${styles.highlightItem} ${styles.staggerFadeIn}`}
+                        style={{ animationDelay: `${0.8 + idx * 0.15}s` }}
+                      >
                         <span className={styles.highlightIcon}>🛸</span>
                         <span>{highlight}</span>
                       </div>
                     ))}
                   </div>
-
                   <div className={styles.stacksContainer}>
-                    {activeProject.stacks.map((stack) => (
-                      <div key={stack.id} className={styles.stackBadge}>
-                        <img
-                          src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${stack.iconPath}`}
-                          alt={stack.name}
-                          className={styles.stackIcon}
-                        />
-                        <span className={styles.stackName}>{stack.name}</span>
-                      </div>
-                    ))}
+                    {activeProject.stacks.map((stack, sIdx) => {
+                      const baseDelay = 0.8 + activeProject.highlights.length * 0.15 + 0.2;
+                      return (
+                        <div 
+                          key={stack.id} 
+                          className={`${styles.stackBadge} ${styles.bubbleZoom}`}
+                          style={{ animationDelay: `${baseDelay + sIdx * 0.1}s` }}
+                        >
+                          <img
+                            src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${stack.iconPath}`}
+                            alt={stack.name}
+                            className={styles.stackIcon}
+                          />
+                          <span className={styles.stackName}>{stack.name}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
             </div>
 
             <div className={styles.timeline}>
-              <div className={styles.timelineLine} style={{ height: `${dotProgress * 100}%` }}></div>
-              <div className={styles.timelineDot} style={{ top: `${dotProgress * 100}%` }}></div>
-              <div className={styles.timelineGlow} style={{ top: `${dotProgress * 100}%` }}></div>
+              <div ref={timelineLineRef} className={styles.timelineLine}></div>
+              <div ref={timelineDotRef} className={styles.timelineDot}></div>
+              <div ref={timelineGlowRef} className={styles.timelineGlow}></div>
             </div>
           </div>
 
-          {/* Right Panel — image grid, switches with activeIndex like left side */}
+          {/* Right Panel */}
           <div className={`${styles.rightPanel} hide-cursor-hover`}>
-            {/* Previous Grid Shadow */}
-            {activeIndex > 0 && (
-              <div className={`${styles.shadowGrid} ${styles.shadowPrev}`}>
-                <div key={`prev-${PROJECTS[activeIndex - 1].id}`} className={`${scrollDir === "down" ? styles.fadeGridUp : styles.fadeGridDown}`}>
+            <div ref={projectsContainerRef} className={styles.projectsContainer}>
+              {PROJECTS.map((project, idx) => (
+                <div 
+                  key={project.id} 
+                  ref={el => cardRefs.current[idx] = el}
+                  className={styles.projectCardWrapper}
+                  style={{ willChange: "transform, opacity" }}
+                >
                   <div className={styles.imageGrid}>
                     <div className={`${styles.imgBox} ${styles.imgTopLeft}`} />
                     <div className={`${styles.imgBox} ${styles.imgBottomLeft}`} />
                     <div className={`${styles.imgBox} ${styles.imgMain}`} />
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* Active Grid */}
-            <div key={activeProject.id} className={`${scrollDir === "down" ? styles.fadeGridUp : styles.fadeGridDown}`}>
-              <div className={styles.imageGrid}>
-                <div className={`${styles.imgBox} ${styles.imgTopLeft}`} />
-                <div className={`${styles.imgBox} ${styles.imgBottomLeft}`} />
-                <div className={`${styles.imgBox} ${styles.imgMain}`} />
-              </div>
+              ))}
             </div>
 
-            {/* Next Grid Shadow */}
-            {activeIndex < PROJECTS.length - 1 && (
-              <div className={`${styles.shadowGrid} ${styles.shadowNext}`}>
-                <div key={`next-${PROJECTS[activeIndex + 1].id}`} className={`${scrollDir === "down" ? styles.fadeGridUp : styles.fadeGridDown}`}>
-                  <div className={styles.imageGrid}>
-                    <div className={`${styles.imgBox} ${styles.imgTopLeft}`} />
-                    <div className={`${styles.imgBox} ${styles.imgBottomLeft}`} />
-                    <div className={`${styles.imgBox} ${styles.imgMain}`} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* See More button — shows only at the last project smoothly */}
             <div className={`${styles.seeMoreContainer} ${activeIndex === PROJECTS.length - 1 ? styles.showButton : styles.hideButton}`}>
               <Link href="/more-projects" className={styles.seeMoreBtn}>
                 See More Project
@@ -195,12 +247,10 @@ export default function ProjectsSection() {
                 </svg>
               </Link>
             </div>
-
           </div>
-
         </div>
-
       </section>
     </div>
   );
 }
+

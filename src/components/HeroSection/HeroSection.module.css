@@ -9,7 +9,8 @@
   justify-content: center;
   padding: calc(var(--navbar-height) + 10px) var(--section-padding-x) 80px;
   overflow: hidden;
-  z-index: 1;
+  /* No z-index here — avoids creating a stacking context that would trap
+     hero children below the fixed rainbow cursor (z-index: 5) */
 }
 
 .hero::before {
@@ -18,7 +19,7 @@
   inset: 0;
   background-color: rgba(0, 0, 0, 0.95);
   /* backdrop-filter removed: invisible behind 95% opaque black, was wasting full-screen GPU blur */
-  z-index: -1;
+  z-index: 0;  /* Root level: sits below cursor (5) and content (10) */
   pointer-events: none;
 }
 
@@ -164,6 +165,17 @@
   color: var(--color-text-secondary);
   max-width: 560px;
   font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.highlightName {
+  font-size: 1.35em;
+  font-weight: 700;
+  background: linear-gradient(90deg, #e0ecf5, #7ec8e3, #4a9ec4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(74, 158, 196, 0.4));
   letter-spacing: 0.01em;
 }
 

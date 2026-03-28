@@ -42,13 +42,13 @@ export default function HeroSection() {
 
         {/* Tagline */}
         <h1 className={styles.tagline}>
-          <span className={styles.taglineBold}>Tagline </span>
-          <span className={styles.taglineAccent}>Tagline</span>
+          <span className={styles.taglineBold}>Modern Web </span>
+          <span className={styles.taglineAccent}>Developer</span>
         </h1>
 
         {/* Description */}
         <p className={styles.description}>
-          I&apos;m Akbar, a Full-Stack Developer with over 8 years of experience
+          Hello, I&apos;m <span className={styles.highlightName}>Akbar Riski</span>, a Web Developer with over 8 years of experience
           crafting end-to-end web solutions. From intuitive front-end interfaces
           to powerful back-end systems, I build scalable, efficient, and reliable
           web applications.

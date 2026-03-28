@@ -41,7 +41,7 @@
   /* Z-index layers */
   --z-watermark: 0;
   --z-content: 1;
-  --z-social: 2;
+  --z-social: 10;
   --z-navbar: 100;
 }
 

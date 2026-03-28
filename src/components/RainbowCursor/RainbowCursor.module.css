@@ -14,4 +14,5 @@
   height: 100vh;
   pointer-events: none; /* Let clicks pass through, JS handles forwarding */
   background: transparent;
+  mix-blend-mode: screen; /* Additive blending: visible on dark bg, invisible over bright text/images */
 }

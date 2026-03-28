@@ -97,7 +97,8 @@ export default function StacksSection() {
               return (
                 <div 
                   key={stack.id} 
-                  className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
+                  className={`${styles.card} ${isActive ? styles.cardActive : ""} 
+                    ${stack.id === "github" || stack.id === "nextjs" ? styles.githubCard : ""}`}
                   onMouseEnter={() => setActiveItem(stack.id)}
                 >
                   {renderIcon(stack)}

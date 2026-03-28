@@ -8,12 +8,12 @@ export const STACK_ROWS = [
     { id: "nuxtjs", name: "NuxtJS", iconPath: "nuxtjs/nuxtjs-original.svg" },
     { id: "react", name: "React", iconPath: "react/react-original.svg" },
     { id: "vue", name: "VueJS", iconPath: "vuejs/vuejs-original.svg" },
-    { id: "jquery", name: "Jquery", iconPath: "jquery/jquery-original.svg" }
+    { id: "redis", name: "Redis", iconPath: "redis/redis-original.svg" }
   ],
   [
     { id: "php", name: "PHP", iconPath: "php/php-original.svg" },
     { id: "mysql", name: "MySQL", iconPath: "mysql/mysql-original.svg" },
-    { id: "laravel", name: "Laravel", iconPath: "laravel/laravel-plain.svg" },
+    { id: "laravel", name: "Laravel", iconPath: "laravel/laravel-original.svg" },
     { id: "codeigniter", name: "Codeigniter", iconPath: "codeigniter/codeigniter-plain.svg" },
     { id: "restful", name: "Restful API", isCustom: true, customIcon: "api" },
     { id: "go", name: "Golang", iconPath: "go/go-original.svg" },
@@ -23,7 +23,7 @@ export const STACK_ROWS = [
     { id: "firebase", name: "Firebase", iconPath: "firebase/firebase-original.svg" },
     { id: "postgresql", name: "PostgreSQL", iconPath: "postgresql/postgresql-original.svg" },
     { id: "flutter", name: "Flutter", iconPath: "flutter/flutter-original.svg" },
-    { id: "kotlin", name: "Kotlin", iconPath: "kotlin/kotlin-original.svg" },
+    { id: "docker", name: "Docker", iconPath: "docker/docker-original.svg" },
     { id: "vscode", name: "VS Code", iconPath: "vscode/vscode-original.svg" }
   ],
   [
