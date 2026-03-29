@@ -100,7 +100,7 @@ export default function RainbowCursor() {
 
   return (
     <div id="rainbow-cursor-container" className={styles.cursorContainer} aria-hidden="true">
-      <canvas ref={canvasRef} className={styles.canvas} style={{ width: '100vw', height: '100vh', display: 'block' }} />
+      <canvas ref={canvasRef} className={styles.canvas} style={{ width: '100%', height: '100vh', display: 'block' }} />
     </div>
   );
 }

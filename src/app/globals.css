@@ -56,18 +56,15 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+html,
 body {
   font-family: var(--font-primary);
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   min-height: 100vh;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip; /* Prevents horizontal scroll without breaking sticky positioning */
   line-height: 1.6;
 }
 

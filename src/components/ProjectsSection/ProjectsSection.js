@@ -14,6 +14,8 @@ export default function ProjectsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dotProgress, setDotProgress] = useState(0);
   const [scrollDir, setScrollDir] = useState("down");
+  const [isMobile, setIsMobile] = useState(false);
+  const [descModal, setDescModal] = useState({ isOpen: false, project: null });
 
   const activeIndexRef = useRef(0);
   const outerRef = useRef(null);
@@ -32,6 +34,15 @@ export default function ProjectsSection() {
   useEffect(() => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     let animationFrameId;
@@ -70,16 +81,12 @@ export default function ProjectsSection() {
     const renderLoop = () => {
       const lerp = (start, end, factor) => start + (end - start) * factor;
       
-      // Interpolate position - 0.1 is very smooth/slow, 0.2 is faster
       currentScrollRef.current = lerp(currentScrollRef.current, targetScrollRef.current, 0.1);
       
       const totalRange = STEP_HEIGHT * (PROJECTS.length - 1);
       
-      // Update visual styles
       const newProgress = updateStyles(currentScrollRef.current, totalRange);
 
-      // Handle activeIndex changes (re-render only when project changes)
-      // Use currentScrollRef to sync text change with visual position
       const newActiveIndex = Math.min(
         PROJECTS.length - 1,
         Math.floor((currentScrollRef.current + STEP_HEIGHT / 2) / STEP_HEIGHT)
@@ -100,14 +107,12 @@ export default function ProjectsSection() {
       const currentScrolledIn = -rect.top;
       const totalRange = STEP_HEIGHT * (PROJECTS.length - 1);
       
-      // We only update the TARGET here. The renderLoop handles the movement.
       targetScrollRef.current = Math.max(0, Math.min(totalRange, currentScrolledIn));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
     
-    // Start continuous animation loop
     animationFrameId = requestAnimationFrame(renderLoop);
 
     return () => {
@@ -120,11 +125,23 @@ export default function ProjectsSection() {
   const [lightbox, setLightbox] = useState({ isOpen: false, project: null, imageIndex: 0 });
   const [zoom, setZoom] = useState(1);
 
+  const openDescModal = (project) => {
+    setDescModal({ isOpen: true, project });
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("lightbox-open");
+  };
+
+  const closeDescModal = () => {
+    setDescModal({ isOpen: false, project: null });
+    document.body.style.overflow = "";
+    document.body.classList.remove("lightbox-open");
+  };
+
   const activeProject = PROJECTS[activeIndex];
 
   const closeLightbox = () => {
     setLightbox({ ...lightbox, isOpen: false });
-    document.body.style.overflow = "auto";
+    document.body.style.overflow = "";
     document.body.classList.remove("hide-rainbow-cursor");
     document.body.classList.remove("lightbox-open");
   };
@@ -173,35 +190,48 @@ export default function ProjectsSection() {
       className={styles.sectionOuter}
       style={{ height: `calc(${(PROJECTS.length - 1) * STEP_HEIGHT + TRAILING_HEIGHT}px + 100vh)` }}
     >
+      <div className={styles.header}>
+        <p className={styles.subtitle}>Where Ideas Become Systems</p>
+        <h2 className={styles.title}>PRODUCT <span className={styles.titleHighlight}>BUILDS</span></h2>
+      </div>
+
       <section className={styles.sectionSticky}>
-
-        <div className={styles.header}>
-          <p className={styles.subtitle}>Where Ideas Become Systems</p>
-          <h2 className={styles.title}>PRODUCT <span className={styles.titleHighlight}>BUILDS</span></h2>
-        </div>
-
         <div className={styles.contentWrapper}>
-
-          {/* Left Sticky Column */}
           <div className={styles.leftPanel}>
             <div className={styles.projectInfo}>
               <div key={activeProject.id} className={`${styles.fadeContent} ${scrollDir === "down" ? styles.fadeLeftUp : styles.fadeLeftDown}`}>
                 <div className={styles.projectInfoTitleWrapper}>
-                  <svg 
-                    className={`${styles.atomicIcon} ${styles.bubbleFadeRight}`} 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
-                    <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)"></ellipse>
-                    <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)"></ellipse>
-                  </svg>
+                  {(activeProject.id === "project-1" || activeProject.id === "project-2" || activeProject.id === "project-3" || activeProject.id === "project-4") ? (
+                    <img 
+                      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nuxtjs/nuxtjs-original.svg" 
+                      alt="NuxtJS"
+                      className={`${styles.projectTypeIcon} ${styles.bubbleFadeRight}`}
+                      style={{ animationDelay: "0s" }}
+                    />
+                  ) : activeProject.id === "project-5" ? (
+                    <img 
+                      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" 
+                      alt="NextJS"
+                      className={`${styles.projectTypeIcon} ${styles.bubbleFadeRight}`}
+                      style={{ animationDelay: "0s", filter: "invert(1) brightness(2)" }}
+                    />
+                  ) : (
+                    <svg 
+                      className={`${styles.atomicIcon} ${styles.bubbleFadeRight}`} 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                      style={{ animationDelay: "0s" }}
+                    >
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
+                      <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)"></ellipse>
+                      <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)"></ellipse>
+                    </svg>
+                  )}
                   <h3 
                     className={`${styles.projectTitle} ${styles.bubbleFadeLeft}`}
                     style={{ animationDelay: "0.1s" }}
@@ -210,44 +240,68 @@ export default function ProjectsSection() {
                   </h3>
                 </div>
 
-                <div className={styles.projectContentBody}>
-                  <p 
-                    className={`${styles.projectDesc} ${styles.staggerFadeIn}`}
-                    style={{ animationDelay: "0.4s" }}
-                  >
-                    {activeProject.description}
-                  </p>
-                  <div className={styles.highlights}>
-                    {activeProject.highlights.map((highlight, idx) => (
-                      <div 
-                        key={`${activeProject.id}-${idx}`} 
-                        className={`${styles.highlightItem} ${styles.staggerFadeIn}`}
-                        style={{ animationDelay: `${0.8 + idx * 0.15}s` }}
-                      >
-                        <span className={styles.highlightIcon}>🛸</span>
-                        <span>{highlight}</span>
+                {isMobile && (
+                  <div className={styles.mobileTechStack}>
+                    {activeProject.stacks.map((stack, sIdx) => (
+                      <div key={sIdx} className={styles.mobileStackItem}>
+                        <img 
+                          src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${stack.iconPath}`} 
+                          alt={stack.name} 
+                          className={styles.mobileStackIcon} 
+                        />
                       </div>
                     ))}
                   </div>
-                  <div className={styles.stacksContainer}>
-                    {activeProject.stacks.map((stack, sIdx) => {
-                      const baseDelay = 0.8 + activeProject.highlights.length * 0.15 + 0.2;
-                      return (
-                        <div 
-                          key={stack.id} 
-                          className={`${styles.stackBadge} ${styles.bubbleZoom}`}
-                          style={{ animationDelay: `${baseDelay + sIdx * 0.1}s` }}
-                        >
-                          <img
-                            src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${stack.iconPath}`}
-                            alt={stack.name}
-                            className={styles.stackIcon}
-                          />
-                          <span className={styles.stackName}>{stack.name}</span>
-                        </div>
-                      );
-                    })}
+                )}
+
+                <div className={styles.projectContentBody}>
+                  <div className={styles.projectDescWrapper}>
+                    <p className={`${styles.projectDesc} ${styles.staggerFadeIn}`}>
+                      {activeProject.description}
+                    </p>
                   </div>
+
+                  {!isMobile && (
+                    <>
+                      <div className={styles.highlights}>
+                        {activeProject.highlights.map((highlight, idx) => (
+                          <div 
+                            key={`${activeProject.id}-${idx}`} 
+                            className={`${styles.highlightItem} ${styles.staggerFadeIn}`}
+                            style={{ animationDelay: `${0.8 + idx * 0.15}s` }}
+                          >
+                            <span className={styles.highlightIcon}>🛸</span>
+                            <span>{highlight}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className={styles.stacksContainer}>
+                        {activeProject.stacks.map((stack, sIdx) => {
+                          const baseDelay = 0.8 + activeProject.highlights.length * 0.15 + 0.2;
+                          return (
+                            <div 
+                              key={stack.id} 
+                              className={`${styles.stackBadge} ${styles.bubbleZoom}`}
+                              style={{ animationDelay: `${baseDelay + sIdx * 0.1}s` }}
+                            >
+                              <img
+                                src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${stack.iconPath}`}
+                                alt={stack.name}
+                                className={styles.stackIcon}
+                              />
+                              <span className={styles.stackName}>{stack.name}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+
+                  {(isMobile || activeProject.description.length > 1000) && (
+                    <button className={styles.readMoreBtn} onClick={() => openDescModal(activeProject)}>
+                      Read More
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -259,7 +313,6 @@ export default function ProjectsSection() {
             </div>
           </div>
 
-          {/* Right Panel */}
           <div className={`${styles.rightPanel} hide-cursor-hover`}>
             <div ref={projectsContainerRef} className={styles.projectsContainer}>
               {PROJECTS.map((project, idx) => (
@@ -303,6 +356,32 @@ export default function ProjectsSection() {
           </div>
         </div>
       </section>
+
+      {/* Description Modal for Mobile/Tablets */}
+      {descModal.isOpen && (
+        <div className={styles.descModalOverlay} onClick={closeDescModal}>
+          <div className={styles.descModalContent} onClick={e => e.stopPropagation()}>
+            <button className={styles.closeModalBtn} onClick={closeDescModal}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div className={styles.descModalHeader}>
+              <h3 className={styles.modalProjectTitle}>{descModal.project.title}</h3>
+            </div>
+            <div className={styles.descModalBody}>
+              <p className={styles.fullDesc}>{descModal.project.description}</p>
+              <div className={styles.modalSectionTitle}>Key Features</div>
+              <div className={styles.modalHighlights}>
+                {descModal.project.highlights.map((highlight, idx) => (
+                  <div key={idx} className={styles.modalHighlightItem}>
+                    <span className={styles.modalHighlightIcon}>🛸</span>
+                    <span className={styles.modalHighlightText}>{highlight}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lightbox Overlay */}
       {lightbox.isOpen && (
@@ -367,4 +446,3 @@ export default function ProjectsSection() {
     </div>
   );
 }
-

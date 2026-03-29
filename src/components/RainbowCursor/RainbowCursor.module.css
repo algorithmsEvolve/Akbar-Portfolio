@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   z-index: 5; /* Base layer above main backgrounds but below all content layers */
   pointer-events: none; 
@@ -10,7 +10,7 @@
 }
 
 .canvas {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   pointer-events: none; /* Let clicks pass through, JS handles forwarding */
   background: transparent;

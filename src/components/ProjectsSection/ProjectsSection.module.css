@@ -6,7 +6,7 @@
 .sectionOuter {
   position: relative;
   /* height is set inline via JS: (PROJECTS.length - 1) * STEP_HEIGHT + 100vh */
-  z-index: 2;
+  z-index: 100; /* Increased to stay above all other section content layers */
 }
 
 /* =============================================
@@ -119,6 +119,13 @@
   width: 36px;
   height: 36px;
   color: #5ba3c9;
+  flex-shrink: 0;
+}
+
+.projectTypeIcon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
@@ -491,71 +498,454 @@
    RESPONSIVE
    ============================================= */
 @media (max-width: 1024px) {
-  .contentWrapper {
-    flex-direction: column;
-    gap: 40px;
-    overflow-y: auto;
+  .sectionOuter {
+    position: relative;
+    width: 100%;
   }
 
-  .leftPanel {
+  .sectionOuter {
     position: relative;
-    top: 0;
     width: 100%;
-    flex: none;
-    height: auto;
-    flex-direction: column-reverse;
+    overflow: visible; /* CRITICAL for sticky */
+    display: block;
+  }
+
+  .sectionSticky {
+    padding: 0 20px 20px; /* Reduced bottom padding to hug bottom */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: visible;
+    z-index: 5;
+    padding-bottom: 120px; /* Safe space for social bar */
+  }
+
+  .header {
+    margin: 40px 20px 20px; /* Reduced for more space */
+    flex: 0 0 auto;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    text-align: center;
+    opacity: 0.7;
+    letter-spacing: 0.12em;
+  }
+
+  .contentWrapper {
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Target exact height for images to fit scaling effect */
+  .rightPanel {
+    flex: 0 0 30vh; /* Slightly smaller to fit info */
+    width: 100%;
+    margin: 0;
+    overflow: hidden; 
+    position: relative;
+    order: 1;
+  }
+
+  .projectsContainer {
+    /* Transform is handled by JS */
+    height: 100%;
+    position: relative;
+  }
+
+  .projectCardWrapper {
+    /* Must be exactly STEP_HEIGHT to match JS translation logic */
+    height: 500px; 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .imageGrid {
+    height: 90%;
+    width: 100%;
+    max-width: 500px;
+    grid-template-columns: 1.2fr 1.8fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Info Panel at bottom */
+  .leftPanel {
+    flex: 0 0 auto; /* Stop expansion */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    order: 2;
+    padding: 24px 20px 0px; 
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .projectInfo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Target the fade container as well */
+  .projectInfo > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .projectInfoTitleWrapper {
+    display: flex;
+    flex-wrap: wrap; /* Ensure long titles wrap */
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    text-align: center;
+    overflow: hidden; /* Local containment */
+  }
+
+  .projectTitle {
+    font-size: 17px;
+  }
+
+  .projectTypeIcon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .atomicIcon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .mobileTechStack {
+    display: flex;
+    flex-wrap: wrap; /* Allow many icons to wrap */
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 12px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    max-width: 90%; /* Keep it within parents */
+  }
+
+  .mobileStackItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobileStackIcon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    filter: grayscale(0.2) opacity(0.8);
+  }
+
+  .projectContentBody {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    width: 100%;
+  }
+
+  .projectDescWrapper {
+    max-height: 250px; /* Filling the void with more description content */
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .projectDescWrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(transparent, rgba(10, 10, 10, 0.8));
+    pointer-events: none;
+  }
+
+  .projectDescWrapper.expanded {
+    max-height: 500px;
+  }
+
+  .projectDescWrapper.expanded::after {
+    display: none;
+  }
+
+  .projectDesc {
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  .readMoreBtn {
+    background: none;
+    border: none;
+    color: #5ba3c9;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px; /* Fixed small gap after text */
+    padding: 10px 0;
+    letter-spacing: 0.12em;
+  }
+
+  .highlights {
+    gap: 6px;
+    margin-bottom: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 90%;
+  }
+
+  .highlightItem {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .stacksContainer {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .stackBadge {
+    padding: 4px 10px;
+  }
+
+  .stackName {
+    font-size: 11px;
   }
 
   .timeline {
     display: none;
   }
 
-  .rightPanel {
-    width: 100%;
+  .seeMoreContainer {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    z-index: 100;
+  }
+
+  .seeMoreBtn {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .sectionSticky {
-    justify-content: flex-start;
     padding-top: 80px;
-    overflow-y: auto;
   }
 
-  .title { font-size: 40px; }
+  .title {
+    font-size: 28px;
+  }
+
+  .rightPanel {
+    flex-basis: 32vh;
+  }
 
   .imageGrid {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 16px;
-  }
-
-  .imgMain {
-    grid-column: 1;
-    grid-row: 1;
-    height: 240px;
+    grid-template-rows: 1fr 0.6fr;
   }
 
   .imgTopLeft {
-    grid-column: 1;
+    display: block;
     grid-row: 2;
-    height: 180px;
+  }
+  
+  .imgBottomLeft {
+    display: none;
   }
 
-  .imgBottomLeft {
-    grid-column: 1;
-    grid-row: 3;
-    height: 180px;
+  .projectDescWrapper {
+    max-height: 25vh;
   }
 }
+
+/* Description Modal (Mobile/Tablet) */
+.descModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85); /* Darker to hide background content */
+  backdrop-filter: blur(20px); /* Heavier blur */
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.descModalContent {
+  background: rgba(15, 20, 30, 0.98); /* Near opaque */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: modalSlideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.closeModalBtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.closeModalBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg);
+}
+
+.descModalHeader {
+  padding: 30px 30px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modalProjectTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(to right, #fff, #5ba3c9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin: 0;
+}
+
+.descModalBody {
+  padding: 0 30px 35px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.fullDesc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.modalSectionTitle {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #5ba3c9;
+  margin-bottom: 18px;
+}
+
+.modalHighlights {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalHighlightItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modalHighlightIcon {
+  font-size: 16px;
+}
+
+.modalHighlightText {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 480px) {
+  .descModalContent {
+    max-height: 90vh;
+  }
+  .descModalHeader { padding: 25px 25px 12px; }
+  .descModalBody { padding: 0 25px 30px; }
+  .modalProjectTitle { font-size: 20px; }
+}
+
 /* =============================================
    LIGHTBOX / IMAGE VIEWER
    ============================================= */
+/* ... (retaining existing lightbox styles unchanged) ... */
 .lightboxOverlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5); /* 50% opacity as requested */
   backdrop-filter: blur(12px); /* Premium blur effect */
