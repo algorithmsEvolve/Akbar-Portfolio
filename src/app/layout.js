@@ -1,5 +1,6 @@
 import { Poppins } from "next/font/google";
 import RainbowCursor from "../components/RainbowCursor/RainbowCursor";
+import Preloader from "../components/Preloader/Preloader";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.variable}>
+        <Preloader />
         <RainbowCursor />
         {children}
       </body>
