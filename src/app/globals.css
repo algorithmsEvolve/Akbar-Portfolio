@@ -1,12 +1,7 @@
 /* ========================================
    DESIGN TOKENS & CSS VARIABLES
    ======================================== */
-.no_scroll,
-.no_scroll body {
-  overflow: hidden !important;
-  height: 100% !important;
-  position: relative !important;
-}
+
 
 :root {
   /* Colors */

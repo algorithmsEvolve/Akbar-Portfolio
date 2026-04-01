@@ -60,18 +60,12 @@ export default function Navbar() {
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
-      document.documentElement.classList.add("no_scroll");
-      document.body.classList.add("lightbox-open");
     } else {
       document.body.style.overflow = "";
-      document.documentElement.classList.remove("no_scroll");
-      document.body.classList.remove("lightbox-open");
     }
     
     return () => {
       document.body.style.overflow = "";
-      document.documentElement.classList.remove("no_scroll");
-      document.body.classList.remove("lightbox-open");
     };
   }, [isMobileMenuOpen]);
 

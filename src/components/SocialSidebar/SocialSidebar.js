@@ -2,26 +2,26 @@
 
 import styles from "./SocialSidebar.module.css";
 
-import Image from "next/image";
+import { GitlabIcon, GithubIcon, LinkedinIcon } from "../Icons";
 
 const SOCIAL_LINKS = [
   {
     id: "gitlab",
     label: "GitLab",
     href: "https://gitlab.com/algorithmsEvolve",
-    icon: "/images/gitlab-icon.png",
+    Icon: GitlabIcon,
   },
   {
     id: "github",
     label: "GitHub",
     href: "https://github.com/algorithmsEvolve",
-    icon: "/images/github-icon.png",
+    Icon: GithubIcon,
   },
   {
     id: "linkedin",
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/akbar-riski/",
-    icon: "/images/linkedin-icon.png",
+    Icon: LinkedinIcon,
   },
 ];
 
@@ -40,7 +40,7 @@ export default function SocialSidebar() {
               title={social.label}
             >
               <span className={styles.socialIcon}>
-                <Image src={social.icon} alt={social.label} width={32} height={32} className={styles.socialImage} />
+                <social.Icon className={styles.socialImage} aria-label={social.label} />
               </span>
             </a>
           </li>

@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./ContactSection.module.css";
+import { GitlabIcon, GithubIcon, LinkedinIcon } from "../Icons";
 
 export default function ContactSection() {
   return (
@@ -26,15 +27,15 @@ export default function ContactSection() {
 
         <div className={styles.socialsContainer}>
           <a href="https://gitlab.com/algorithmsEvolve" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <img src="/images/gitlab-icon.png" className={styles.socialIcon} alt="Gitlab" />
+            <GitlabIcon className={styles.socialIcon} aria-label="Gitlab" />
             <span className={styles.socialText}>Gitlab</span>
           </a>
           <a href="https://github.com/algorithmsEvolve" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <img src="/images/github-icon.png" className={styles.socialIcon} alt="Github" />
+            <GithubIcon className={styles.socialIcon} aria-label="Github" />
             <span className={styles.socialText}>Github</span>
           </a>
           <a href="https://www.linkedin.com/in/akbar-riski/" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <img src="/images/linkedin-icon.png" className={styles.socialIcon} alt="Linkedin" />
+            <LinkedinIcon className={styles.socialIcon} aria-label="Linkedin" />
             <span className={styles.socialText}>Linkedin</span>
           </a>
         </div>
