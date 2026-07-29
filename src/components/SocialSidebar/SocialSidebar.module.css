@@ -28,7 +28,7 @@
 }
 
 .socialLink:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--color-bg-nav-active);
   transform: scale(1.1);
 }
 
@@ -42,12 +42,14 @@
   width: 32px;
   height: 32px;
   object-fit: contain;
-  opacity: 0.7;
-  transition: opacity var(--transition-fast);
+  opacity: 0.65;
+  filter: grayscale(1) sepia(0.2);
+  transition: opacity var(--transition-fast), filter var(--transition-fast);
 }
 
 .socialLink:hover .socialImage {
   opacity: 1;
+  filter: none;
 }
 
 /* ========================================
@@ -77,11 +79,11 @@
     right: 0;
     top: auto;
     transform: none;
-    background-color: rgba(10, 10, 10, 0.95);
+    background-color: var(--color-bg-navbar);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 12px 0;
+    border-top: 1px solid var(--color-border-soft);
+    padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
   }
 
   .socialList {

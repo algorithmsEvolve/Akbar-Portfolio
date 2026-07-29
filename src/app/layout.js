@@ -10,6 +10,11 @@ const poppins = Poppins({
   display: "swap",
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata = {
   title: "Akbar Riski | Full-Stack Developer",
   description:
@@ -30,10 +35,13 @@ export const metadata = {
   },
 };
 
+const themeInit = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","light");}})();`;
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light">
       <body className={poppins.variable}>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <Preloader />
         <RainbowCursor />
         {children}

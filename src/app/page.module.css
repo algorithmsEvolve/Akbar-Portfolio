@@ -30,7 +30,7 @@
 .placeholderContent h2 {
   font-size: 32px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.15);
+  color: color-mix(in srgb, var(--color-paper) 15%, transparent);
   margin-bottom: 8px;
 }
 

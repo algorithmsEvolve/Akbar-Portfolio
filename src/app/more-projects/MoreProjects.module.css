@@ -1,7 +1,7 @@
 .main {
   min-height: 100vh;
-  background-color: #050505;
-  color: #fff;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
 }
@@ -18,10 +18,10 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(5, 5, 5, 0.8);
+  background: var(--color-bg-navbar);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 .logoContainer, .headerSpacer {
@@ -37,20 +37,20 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
   padding: 10px 24px;
-  border-radius: 99px;
+  border-radius: 999px;
   font-size: 14px;
   font-weight: 500;
-  color: #fff;
+  color: var(--color-text-primary);
   transition: background 0.2s, border-color 0.2s;
   text-decoration: none;
 }
 
 .backBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--color-bg-elevated);
+  border-color: var(--color-accent-blue);
 }
 
 /* =============================================
@@ -75,9 +75,9 @@
    PROJECT CARD
    ============================================= */
 .projectCard {
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-lg);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -86,14 +86,14 @@
 
 .projectCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  border-color: rgba(91, 163, 201, 0.3);
+  box-shadow: 10px 10px 0 var(--color-shadow);
+  border-color: var(--color-accent-blue);
 }
 
 .projectDesc {
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--color-text-secondary);
   margin-top: 16px;
   margin-bottom: 20px;
 }
@@ -110,7 +110,7 @@
   align-items: flex-start;
   gap: 8px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-muted);
 }
 
 .highlightIcon {
@@ -132,12 +132,12 @@
 }
 
 .imgBox {
-  background-color: #1a242d;
-  border-radius: 8px;
+  background: var(--color-paper);
+  border-radius: var(--radius-sm);
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border-soft);
   transition: transform 0.4s ease, border-color 0.4s ease;
 }
 
@@ -158,7 +158,7 @@
 
 .imgBox:hover {
   transform: translateY(-4px) scale(1.02);
-  border-color: rgba(91, 163, 201, 0.4);
+  border-color: var(--color-accent-blue);
 }
 
 .projectImage {
@@ -188,7 +188,7 @@
 .atomicIcon {
   width: 24px;
   height: 24px;
-  color: #5ba3c9;
+  color: var(--color-accent-blue);
 }
 
 .projectTitle {
@@ -216,16 +216,16 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
   padding: 6px 14px;
-  border-radius: 99px;
+  border-radius: var(--radius-md);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .stackBadge:hover {
   background: rgba(91, 163, 201, 0.1);
-  border-color: #5ba3c9;
+  border-color: var(--color-accent-blue);
 }
 
 .stackIcon {
@@ -237,13 +237,13 @@
 .stackName {
   font-size: 11px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-secondary);
 }
 
 .linkArrowBtn {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--color-text-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -256,7 +256,7 @@
 
 .projectCard:hover .linkArrowBtn {
   opacity: 1;
-  color: #5ba3c9;
+  color: var(--color-accent-blue);
   transform: translateX(4px);
 }
 .lightboxOverlay {
@@ -265,7 +265,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5); 
+  background: rgba(41, 45, 52, 0.38);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 999999;
@@ -312,9 +312,9 @@
 
 .closeBtn, .navBtn {
   position: absolute;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: color-mix(in srgb, var(--color-bg-primary) 94%, transparent);
+  border: 1px solid var(--color-border-soft);
+  color: var(--color-accent-blue);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -330,8 +330,9 @@
   position: relative;
   width: 36px !important;
   height: 36px !important;
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-bg-primary) 92%, transparent);
   border-radius: 50%;
+  border: 1px solid var(--color-border-soft);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -343,8 +344,8 @@
 .zoomBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .closeBtn:hover, .navBtn:hover, .zoomBtn:hover {
-  background: rgba(0, 0, 0, 0.85);
-  border-color: #5ba3c9;
+  background: var(--color-paper);
+  border-color: var(--color-accent-blue);
   transform: scale(1.1);
 }
 
@@ -369,17 +370,17 @@
   display: flex;
   gap: 12px;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.5);
+  background: color-mix(in srgb, var(--color-bg-primary) 92%, transparent);
   backdrop-filter: blur(5px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-soft);
   pointer-events: auto;
 }
 
 .thumbnailItem {
   width: 60px;
   height: 40px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
@@ -391,7 +392,7 @@
 .thumbnailItem img { width: 100%; height: 100%; object-fit: cover; }
 
 .activeThumbnail {
-  border-color: #5ba3c9;
+  border-color: var(--color-accent-blue);
   opacity: 1;
   transform: scale(1.1);
   box-shadow: 0 0 15px rgba(91, 163, 201, 0.5);
@@ -402,16 +403,16 @@
   align-items: center;
   gap: 12px;
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.4);
+  background: color-mix(in srgb, var(--color-bg-primary) 92%, transparent);
   padding: 6px 12px;
-  border-radius: 99px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  border: 1px solid var(--color-border-soft);
 }
 
 .zoomLevel {
   font-size: 13px;
   font-weight: 500;
-  color: white;
+  color: var(--color-text-primary);
   min-width: 40px;
   text-align: center;
 }
