@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import StacksSection from "@/components/StacksSection";
 import ProjectsSection from "@/components/ProjectsSection";
+import ProjectShowcaseSection from "@/components/FramerProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import SocialSidebar from "@/components/SocialSidebar";
 import styles from "./page.module.css";
@@ -21,6 +22,8 @@ export default function Home() {
         <StacksSection />
 
         <ProjectsSection />
+
+        <ProjectShowcaseSection />
 
         <ContactSection />
       </main>

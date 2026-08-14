@@ -1,75 +1,133 @@
+/* =============================================
+   CONTACT SECTION — Framer layout replica
+   Local palette colors only.
+   ============================================= */
+
 .section {
   position: relative;
-  padding: 120px 0 0; /* No bottom padding to allow giant text to hug the bottom */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden; /* Prevent horizontal scroll from giant text */
-  background-color: var(--color-bg-secondary);
-  z-index: 5;
-}
-
-.contentWrapper {
   width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 10;
-  padding: 0 var(--section-padding-x);
-  box-sizing: border-box;
+  height: 826px;
+  overflow: hidden;
+  background-color: var(--color-bg-primary);
 }
 
-.contactInfoBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 40px;
+/* ---- Quote card that follows cursor (desktop only) ---- */
+.quoteCursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.quoteCursorVisible {
+  opacity: 1;
+}
+
+.quoteAnchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+}
+
+.quoteCard {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: max-content;
+  max-width: 260px;
+  padding: 22px 26px;
+  border-radius: 50px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  line-height: 1.45;
+  box-shadow: 0 10px 30px var(--color-shadow);
+  opacity: 0;
+  transform: translateX(-50%) scale(0.8);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  white-space: nowrap;
+}
+
+.quoteCardActive {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* ---- Left content cluster ---- */
+.leftContent {
+  position: absolute;
+  left: 54px;
+  top: 100px;
+  z-index: 10;
 }
 
 .subtitle {
-  font-size: 16px;
-  color: var(--color-text-muted);
-  margin-bottom: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.title {
-  font-size: 56px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 400;
   color: var(--color-text-primary);
-  margin-bottom: 60px;
-  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  margin-bottom: 18px;
+}
+
+.titleGetIn {
+  font-family: var(--font-primary);
+  font-size: 85px;
+  font-weight: 600;
+  color: var(--color-text-primary);
   text-transform: uppercase;
-  line-height: 1.1;
+  line-height: 71px;
+  letter-spacing: 0.02em;
 }
 
-.titleHighlight {
-  color: var(--color-accent-blue);
-  padding-right: 15px; /* Prevent italic 'h' from getting cut off due to background-clip */
+.titleTouch {
+  font-family: var(--font-primary);
+  font-size: 85px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 90px;
+  letter-spacing: 0.02em;
+  background: linear-gradient(
+    0deg,
+    var(--color-accent-blue) 0%,
+    var(--color-accent-gradient-end) 52%,
+    var(--color-accent-gradient-start) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateX(-3px);
 }
 
-.infoGrid {
+/* ---- Info row ---- */
+.infoRow {
   display: flex;
-  gap: 140px; /* Space between email block and location block */
+  gap: 200px;
+  margin-top: 56px;
 }
 
-.infoBlock {
+.infoItem {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .infoLabel {
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--color-accent-blue);
+  letter-spacing: 0.02em;
 }
 
 .infoValue {
   font-size: 18px;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   text-decoration: none;
   font-weight: 400;
   transition: color 0.3s ease;
@@ -79,125 +137,199 @@
   color: var(--color-accent-blue);
 }
 
-.socialsContainer {
+/* ---- Socials (bottom-left, icon-only) ---- */
+.socialsRow {
+  position: absolute;
+  left: 42px;
+  bottom: 70px;
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 40px;
-  margin-top: 140px;
-  margin-bottom: 120px;
-  position: relative;
-  z-index: 5;
+  z-index: 10;
 }
 
 .socialLink {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: var(--color-accent-blue);
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  transition: opacity 0.3s ease, color 0.3s ease;
 }
 
 .socialLink:hover {
-  color: var(--color-text-primary);
-  transform: translateY(-2px);
-}
-
-.socialText {
-  font-size: 16px;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  opacity: 1;
+  color: var(--color-accent-blue);
 }
 
 .socialIcon {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  filter: brightness(100%);
-  transition: filter 0.3s ease;
 }
 
-.socialLink:hover .socialIcon {
-  filter: brightness(100%);
-}
-
-.giantTextContainer {
+/* ---- Avatar (right half, large) ---- */
+.avatarWrap {
   position: absolute;
-  bottom: -10px; /* Adjust bottom slightly */
-  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 642px;
+  height: 642px;
+  z-index: 5;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.avatarImg {
   width: 100%;
-  padding-left: 20px; /* Give it a little breathing room from the absolute left border */
-  display: flex;
-  justify-content: flex-start; /* Left aligned to make it stick to the left corner */
-  pointer-events: none; /* Don't intercept clicks */
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12))
+          drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08))
+          drop-shadow(0 0 1px rgba(0, 0, 0, 0.06));
+}
+
+html[data-theme="dark"] .avatarImg {
+  filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.35))
+          drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25));
+}
+
+/* ---- Vertical AKBAR (far right, rotated, flush to edge) ---- */
+.akbarAnchor {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
   z-index: 1;
+  pointer-events: none;
 }
 
-.giantText {
-  font-size: 11vw; /* Huge responsive text */
-  font-weight: 900;
-  color: rgba(96, 123, 170, 0.08);
-  line-height: 0.8;
+/* hide visual avatar area from blocking clicks outside it */
+.avatarWrap::after {
+  content: none;
+}
+
+/* avatar hit area is bounded by .avatarWrap (642x642). sections outside don't trigger quote */
+
+.verticalAkbar {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: right center;
+  font-family: var(--font-primary);
+  font-size: 215px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  opacity: 0.07;
+  text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -0.02em;
-  user-select: none;
+  line-height: 1;
 }
 
-/* RESPONSIVE */
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 1439px) {
+  .avatarWrap {
+    width: 561px;
+    height: 561px;
+  }
+  .verticalAkbar {
+    font-size: 136px;
+  }
+  .quoteCursor {
+    display: none;
+  }
+}
+
 @media (max-width: 1024px) {
-  .giantTextContainer {
-    bottom: -8px;
+  .section {
+    height: auto;
+    min-height: 700px;
+    padding: 80px 40px;
   }
-  .giantText {
-    font-size: 13vw;
+  .avatarWrap {
+    width: 392px;
+    height: 392px;
+    right: -40px;
+    bottom: -20px;
   }
-  .infoGrid {
+  .verticalAkbar {
+    font-size: 100px;
+  }
+  .leftContent {
+    left: 40px;
+    top: 60px;
+  }
+  .titleGetIn, .titleTouch {
+    font-size: 56px;
+  }
+  .infoRow {
     gap: 80px;
+    margin-top: 40px;
   }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding-top: 40px;
-    padding-bottom: 140px; /* Safe space to avoid being cut off by social bar */
+    min-height: auto;
+    padding: 100px 24px 96px;
   }
-  .contactInfoBlock {
-    margin-top: 20px;
-    align-items: center; /* Center-align the text blocks */
-    text-align: center;
-    width: 100%;
+  .leftContent {
+    left: 24px;
+    right: 24px;
+    top: 80px;
+    position: relative;
+    max-width: 65%;
   }
   .subtitle {
     font-size: 13px;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
   }
-  .title {
-    font-size: 28px; /* Further reduced as requested */
-    margin-bottom: 28px;
+  .titleGetIn, .titleTouch {
+    font-size: 38px;
+    line-height: 1;
   }
-  .infoGrid {
-    display: flex;
-    flex-direction: row; /* Side-by-side if they fit */
-    flex-wrap: wrap; /* Safety wrap for long emails */
-    gap: 32px; 
-    align-items: flex-start;
-    text-align: left; /* Keep left-aligned as requested */
-    width: 100%;
+  .infoRow {
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 36px;
   }
-  .infoBlock {
-    gap: 4px; /* More compact */
+  .infoLabel, .infoValue {
+    font-size: 13px;
   }
-  .infoValue, .infoLabel {
-    font-size: 13px; /* Reduced font size */
+  .socialsRow {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-top: 20px;
+    gap: 10px;
+    z-index: 10;
   }
-  .socialsContainer {
-    display: none; /* Hidden on mobile to avoid overlap with fixed social bar */
+  .socialLink {
+    width: 32px;
+    height: 32px;
+    opacity: 0.85;
   }
-  .giantTextContainer {
-    bottom: -5px;
+  .socialIcon {
+    width: 22px;
+    height: 22px;
   }
-  .giantText {
-    font-size: 18vw;
+  .avatarWrap {
+    position: absolute;
+    right: -200px;
+    top: 100px;
+    width: 480px;
+    height: 480px;
+    margin: 0;
+    opacity: 0.55;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .verticalAkbar {
+    display: none;
   }
 }

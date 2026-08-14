@@ -41,10 +41,7 @@ export default function HeroSection() {
         </div>
 
         {/* Tagline */}
-        <h1 className={styles.tagline}>
-          <span className={styles.taglineBold}>Modern Web </span>
-          <span className={styles.taglineAccent}>Developer</span>
-        </h1>
+        <h1 className={styles.tagline}>Fullstack Developer</h1>
 
         {/* Description */}
         <p className={styles.description}>

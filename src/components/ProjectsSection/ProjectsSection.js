@@ -125,34 +125,63 @@ export default function ProjectsSection() {
   const [lightbox, setLightbox] = useState({ isOpen: false, project: null, imageIndex: 0 });
   const [zoom, setZoom] = useState(1);
 
+  useEffect(() => {
+    const isModalOpen = descModal.isOpen || lightbox.isOpen;
+    const previousScrollY = window.scrollY;
+
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${previousScrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
+      document.body.classList.add("lightbox-open");
+      document.documentElement.classList.add("lightbox-open");
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      document.body.classList.remove("lightbox-open");
+      document.documentElement.classList.remove("lightbox-open");
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      document.body.classList.remove("lightbox-open");
+      document.documentElement.classList.remove("lightbox-open");
+      if (isModalOpen) window.scrollTo(0, previousScrollY);
+    };
+  }, [descModal.isOpen, lightbox.isOpen]);
+
   const openDescModal = (project) => {
     setDescModal({ isOpen: true, project });
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("lightbox-open");
   };
 
   const closeDescModal = () => {
     setDescModal({ isOpen: false, project: null });
-    document.body.style.overflow = "";
-    document.body.classList.remove("lightbox-open");
   };
 
   const activeProject = PROJECTS[activeIndex];
 
   const closeLightbox = () => {
     setLightbox({ ...lightbox, isOpen: false });
-    document.body.style.overflow = "";
-    document.body.classList.remove("hide-rainbow-cursor");
-    document.body.classList.remove("lightbox-open");
   };
 
   const openLightbox = (project, index) => {
     if (!project.images || project.images.length === 0) return;
     setLightbox({ isOpen: true, project, imageIndex: index });
     setZoom(1);
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("hide-rainbow-cursor");
-    document.body.classList.add("lightbox-open");
   };
 
   const nextImage = (e) => {
@@ -268,7 +297,7 @@ export default function ProjectsSection() {
                           <div 
                             key={`${activeProject.id}-${idx}`} 
                             className={`${styles.highlightItem} ${styles.staggerFadeIn}`}
-                            style={{ animationDelay: `${0.8 + idx * 0.15}s` }}
+                            style={{ animationDelay: `${0.3 + idx * 0.08}s` }}
                           >
                             <span className={styles.highlightIcon}>🛸</span>
                             <span>{highlight}</span>
@@ -277,7 +306,7 @@ export default function ProjectsSection() {
                       </div>
                       <div className={styles.stacksContainer}>
                         {activeProject.stacks.map((stack, sIdx) => {
-                          const baseDelay = 0.8 + activeProject.highlights.length * 0.15 + 0.2;
+                          const baseDelay = 0.3 + activeProject.highlights.length * 0.08 + 0.1;
                           return (
                             <div 
                               key={stack.id} 
@@ -300,9 +329,21 @@ export default function ProjectsSection() {
                   {(isMobile || activeProject.description.length > 1000) && (
                     <button className={styles.readMoreBtn} onClick={() => openDescModal(activeProject)}>
                       Read More
-                    </button>
+                   </button>
                   )}
-                </div>
+
+                  {activeProject.link && (
+                    <a
+                      className={`${styles.visitBtn} ${styles.staggerFadeIn}`}
+                      style={{ animationDelay: `${0.3 + activeProject.highlights.length * 0.08 + 0.1}s` }}
+                      href={activeProject.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open Website <span aria-hidden="true" className={styles.visitArrow}>↗</span>
+                   </a>
+                  )}
+               </div>
               </div>
             </div>
 
@@ -335,23 +376,6 @@ export default function ProjectsSection() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div className={`${styles.seeMoreContainer} ${activeIndex === PROJECTS.length - 1 ? styles.showButton : styles.hideButton}`}>
-              <Link href="/more-projects" className={styles.seeMoreBtn}>
-                See More Project
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <defs>
-                    <linearGradient id="seeMoreGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#d4efff" />
-                      <stop offset="100%" stopColor="#084d7a" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="12" cy="12" r="10" stroke="url(#seeMoreGrad)"></circle>
-                  <polyline points="12 16 16 12 12 8" stroke="url(#seeMoreGrad)"></polyline>
-                  <line x1="8" y1="12" x2="16" y2="12" stroke="url(#seeMoreGrad)"></line>
-                </svg>
-              </Link>
             </div>
           </div>
         </div>

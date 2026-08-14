@@ -155,5 +155,61 @@ export const PROJECTS = [
   }
 ];
 
-export const INITIAL_PROJECTS = PROJECTS.slice(0, 5);
-export const MORE_PROJECTS = PROJECTS.slice(5);
+// Project 7: Paper.id — extracted from CV PDF
+export const PROJECT_PAPER_ID = {
+  id: "project-7",
+  title: "Paper.id",
+  description: "Paper.id is one of Indonesia's leading B2B financial technology platforms, providing digital invoicing, payment, and cash flow management solutions for businesses of all sizes. As a member of the development team, I contributed to building and maintaining a scalable, high-performance platform that streamlines financial operations, automates business workflows, and delivers a reliable user experience for hundreds of thousands of businesses across Indonesia.",
+  highlights: [
+    "B2B Fintech at National Scale",
+    "Automated Invoicing & Payment Workflows",
+    "High-Performance Frontend Architecture",
+    "Cash Flow Management Dashboard",
+    "Trusted by Hundreds of Thousands of Businesses"
+  ],
+  stacks: [
+    { id: "nextjs", name: "NextJS", iconPath: "nextjs/nextjs-original.svg" },
+    { id: "react", name: "React", iconPath: "react/react-original.svg" },
+  ],
+  images: [
+    "/projects/paper/Screenshot 2026-06-21 213132.png",
+    "/projects/paper/Screenshot 2026-06-21 213207.png",
+    "/projects/paper/Screenshot 2026-06-21 213353.png",
+  ],
+  link: "https://www.paper.id/",
+};
+
+// Project 8: AZA Mobile — extracted from CV PDF
+export const PROJECT_AZA = {
+  id: "project-8",
+  title: "AZA Mobile",
+  description: "An enterprise-grade mobile application for TNI Mabes Angkatan Udara (AU), delivering secure, role-based internal operations and asset monitoring across air force branches nationwide.",
+  highlights: [
+    "Nationwide Air Force Internal Deployment",
+    "Role-Based Secure Mobile Access",
+    "Real-Time Asset & Incident Tracking",
+    "Automated Multi-Role Approval Workflow",
+    "Geospatial Resource Mapping"
+  ],
+  stacks: [
+    { id: "flutter", name: "Flutter", iconPath: "flutter/flutter-original.svg" },
+    { id: "nextjs", name: "NextJS", iconPath: "nextjs/nextjs-original.svg" },
+    { id: "laravel", name: "Laravel", iconPath: "laravel/laravel-original.svg" },
+    { id: "mysql", name: "MySQL", iconPath: "mysql/mysql-original.svg" },
+  ],
+  images: [
+    "/projects/aza/image.png",
+    "/projects/aza/image(1).png",
+    "/projects/aza/image-2.png",
+    "/projects/aza/image-3.png",
+    "/projects/aza/image-5.png",
+    "/projects/aza/image-6.png",
+  ],
+  link: null,
+};
+
+PROJECTS.push(PROJECT_PAPER_ID, PROJECT_AZA);
+
+export const PRIMARY_PROJECT_IDS = ["project-2", "project-3", "project-7", "project-8"];
+export const INITIAL_PROJECTS = PRIMARY_PROJECT_IDS.map((id) => PROJECTS.find((project) => project.id === id)).filter(Boolean);
+export const MORE_PROJECTS = PROJECTS.filter((project) => !PRIMARY_PROJECT_IDS.includes(project.id));

@@ -39,9 +39,11 @@ const themeInit = `(function(){try{var t=localStorage.getItem("theme");document.
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="light">
-      <body className={poppins.variable}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+      </head>
+      <body className={poppins.variable}>
         <Preloader />
         <RainbowCursor />
         {children}

@@ -10,7 +10,7 @@
 
 .header {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 56px;
   position: relative;
   z-index: 10;
 }
@@ -76,10 +76,17 @@
 .cardIcon {
   width: 32px;
   height: 32px;
-  /* Monochromatic effect for unactive state */
   filter: grayscale(100%) brightness(150%) opacity(0.6);
   transition: filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   object-fit: contain;
+}
+
+.iconDarker {
+  filter: grayscale(100%) brightness(0.97) opacity(0.92);
+}
+
+:global(html[data-theme="dark"]) .iconDarker {
+  filter: grayscale(100%) brightness(150%) opacity(0.6);
 }
 
 .cardName {
@@ -103,17 +110,31 @@
   filter: grayscale(0%) brightness(100%) opacity(1);
 }
 
+:global(html[data-theme="dark"]) .card:hover .cardIcon,
+:global(html[data-theme="dark"]) .cardActive .cardIcon {
+  filter: grayscale(0%) brightness(100%) opacity(1);
+}
+
 .card:hover .cardName, .cardActive .cardName {
   color: var(--color-accent-blue);
   text-shadow: none;
 }
 
 .githubCard .cardIcon {
+  filter: invert(0) grayscale(100%) brightness(0.55) opacity(0.75);
+}
+
+:global(html[data-theme="dark"]) .githubCard .cardIcon {
   filter: invert(1) grayscale(100%) opacity(0.6) brightness(1.2);
 }
 
 .githubCard:hover .cardIcon, 
 .cardActive.githubCard .cardIcon {
+  filter: grayscale(0%) brightness(100%) opacity(1);
+}
+
+:global(html[data-theme="dark"]) .githubCard:hover .cardIcon,
+:global(html[data-theme="dark"]) .cardActive.githubCard .cardIcon {
   filter: invert(1) grayscale(0%) opacity(1) brightness(1.5);
 }
 

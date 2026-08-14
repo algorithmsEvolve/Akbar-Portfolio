@@ -160,21 +160,26 @@ button {
 /* ========================================
    SCROLLBAR STYLING
    ======================================== */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-blue) transparent;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(96, 123, 170, 0.2);
+  background: var(--color-accent-blue);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(96, 123, 170, 0.5);
+  background: #4f6894;
 }
 
 /* ========================================
@@ -214,6 +219,17 @@ body.lightbox-open header,
 body.lightbox-open aside,
 body.lightbox-open [class*="sidebar"] {
   display: none !important;
+}
+
+/* Mobile: hide theme toggle + mobile actions while a modal/lightbox is open */
+@media (max-width: 1024px) {
+  body.lightbox-open header,
+  body.lightbox-open aside,
+  body.lightbox-open [class*="sidebar"],
+  body.lightbox-open [class*="mobileActions"],
+  body.lightbox-open [class*="desktopActions"] {
+    display: none !important;
+  }
 }
 
 /* Editorial portfolio: paper background with subtle blue radial */

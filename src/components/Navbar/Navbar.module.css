@@ -45,15 +45,6 @@
   transition: opacity var(--transition-fast);
 }
 
-.logo::after {
-  content: "AR";
-  color: var(--color-accent-blue);
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1;
-}
-
 .logo:hover {
   opacity: 0.8;
 }
@@ -63,6 +54,10 @@
   height: auto;
   object-fit: contain;
   filter: brightness(0) saturate(100%) invert(47%) sepia(17%) saturate(929%) hue-rotate(179deg) brightness(88%) contrast(87%);
+}
+
+html[data-theme="dark"] .logoImage {
+  filter: brightness(0) saturate(100%) invert(72%) sepia(28%) saturate(724%) hue-rotate(179deg) brightness(102%) contrast(89%);
 }
 
 
@@ -75,6 +70,12 @@
 
 .mobileActions {
   display: none;
+}
+
+:global(body.showcase-modal-open) .header,
+:global(body.showcase-modal-open) .mobileActions {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ========================================
@@ -265,11 +266,100 @@
    ======================================== */
 @media (max-width: 768px) {
   .header {
-    padding-top: 6px; 
-    height: 54px; /* Even smaller for mobile */
-    background-color: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    padding-top: 0;
+    height: auto;
+    left: 12px;
+    right: 12px;
+    top: 10px;
+    border-radius: 28px;
+    background:
+      linear-gradient(135deg, rgba(168, 196, 235, 0.28), rgba(96, 123, 170, 0.18)),
+      rgba(235, 242, 250, 0.28);
+    backdrop-filter: blur(120px) saturate(200%) contrast(88%);
+    -webkit-backdrop-filter: blur(120px) saturate(200%) contrast(88%);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    box-shadow:
+      0 8px 32px rgba(16, 20, 27, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.65),
+      inset 0 -1px 0 rgba(96, 123, 170, 0.14),
+      inset 1px 0 0 rgba(255, 255, 255, 0.22),
+      inset -1px 0 0 rgba(255, 255, 255, 0.22);
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background:
+      radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.72), transparent 16%),
+      radial-gradient(circle at 38% 62%, rgba(255, 255, 255, 0.28), transparent 18%),
+      radial-gradient(circle at 72% 36%, rgba(96, 123, 170, 0.34), transparent 18%),
+      radial-gradient(circle at 82% 70%, rgba(96, 123, 170, 0.18), transparent 16%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 34%, transparent 66%, rgba(255, 255, 255, 0.22));
+    filter: blur(18px);
+    transform: scale(1.08) skewX(-8deg);
+    mix-blend-mode: screen;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.75) 43%, rgba(255, 255, 255, 0.16) 51%, transparent 60%),
+      radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.55), transparent 42%);
+    mix-blend-mode: screen;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  :global(html[data-theme="dark"]) .header {
+    background:
+      linear-gradient(135deg, rgba(96, 123, 170, 0.34), rgba(38, 52, 78, 0.32)),
+      rgba(24, 32, 50, 0.5);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(96, 123, 170, 0.2),
+      inset 1px 0 0 rgba(255, 255, 255, 0.06),
+      inset -1px 0 0 rgba(255, 255, 255, 0.06);
+  }
+
+  :global(html[data-theme="dark"]) .header::before {
+    background:
+      linear-gradient(
+        115deg,
+        rgba(255, 255, 255, 0.22) 0%,
+        rgba(255, 255, 255, 0.08) 18%,
+        transparent 38%,
+        transparent 62%,
+        rgba(255, 255, 255, 0.05) 82%,
+        rgba(255, 255, 255, 0.12) 100%
+      ),
+      linear-gradient(
+        115deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.12) 42%,
+        rgba(255, 255, 255, 0.04) 50%,
+        transparent 58%
+      );
+  }
+
+  :global(html[data-theme="dark"]) .header::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  }
+
+  .headerInner {
+    height: 50px;
+    padding-left: 16px;
+    padding-right: 16px;
+    z-index: 1;
   }
 
   .logoImage {
@@ -289,8 +379,9 @@
     align-items: center;
     gap: 12px;
     position: fixed;
-    top: 11px;
-    right: var(--section-padding-x);
+    top: 35px;
+    right: 28px;
+    transform: translateY(-50%);
     z-index: 5000;
   }
 

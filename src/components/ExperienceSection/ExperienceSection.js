@@ -6,24 +6,31 @@ import styles from "./ExperienceSection.module.css";
 const EXPERIENCES = [
   {
     id: 1,
-    year: "2021 - Present",
+    year: "2022 - Present",
     role: "Full Stack Developer",
     company: "ATT Group · Full-time",
-    description: "I've been a key part of the engineering team at ATT Group since early 2021, diving deep into the world of logistics and supply chain. It's been an incredible journey of building massive enterprise systems from the ground up and making sure every piece of the puzzle integrates perfectly to keep things moving smoothly.",
-  },
-  {
-    id: 3,
-    year: "2021 - Present",
-    role: "Founder & Creative Lead",
-    company: "Momento Project · Founder",
-    description: "Momento Project is where my love for tech meets my artistic side. Since 2021, I've been obsessing over creating wedding invitations that aren't just digital—they're flawless experiences with an aesthetic edge. We also craft handcrafted gifts (seserahan & mahar), because I believe the best products always blend high-tech with a high-touch, human feel.",
+    description: "Promoted to Full Stack Developer, expanding across both Front-End and Back-End. Delivered multiple business platforms including LSP & LMS, RumaH LPK (online learning), Warehouse Management System (WMS), and Vendor Management System (VMS)—from system design and implementation to deployment and maintenance.",
   },
   {
     id: 2,
+    year: "2021 - 2022",
+    role: "Back End Developer",
+    company: "ATT Group · Full-time",
+    description: "Designed, developed, and maintained server-side applications and APIs for business-critical systems. Contributed to Indonesia Hub, an e-commerce platform, by building scalable backend services, database structures, and system integrations for product management, transactions, and operational workflows.",
+  },
+  {
+    id: 3,
     year: "2022 - Present",
-    role: "Fullstack Developer",
+    role: "Full Stack Developer & Mobile Apps Developer",
     company: "PT. Inovasi Digital Sadadjiwa (IDS) · Freelance",
-    description: "Since 2022, I've been geeking out with the crew at IDS as a freelance dev. I'm all about pushing the limits with the latest tech stacks and AI-driven optimizations. From startups to government projects, I take pride in providing tailored, high-performance solutions that actually solve real-world headaches for my clients.",
+    description: "Contributed to enterprise-grade software solutions across the energy, government, and defense sectors. Delivered full-stack features for large-scale applications supporting digital transformation initiatives—from scalable frontend applications and robust backend services to seamless API integrations.",
+  },
+  {
+    id: 4,
+    year: "2020 - 2024",
+    role: "Front End Developer",
+    company: "Paper.id · Part-time",
+    description: "Part of the development team at Paper.id, one of Indonesia's leading B2B fintech platforms. Contributed to building a scalable, high-performance platform providing digital invoicing, payment, and cash flow management solutions for hundreds of thousands of businesses across Indonesia.",
   },
 ];
 

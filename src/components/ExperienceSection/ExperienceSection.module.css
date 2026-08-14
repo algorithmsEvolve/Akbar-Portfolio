@@ -4,7 +4,8 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  z-index: 2;
+  /* No z-index — avoids creating a stacking context that would trap
+     contentWrapper (z-index: 10) below the fixed rainbow cursor (z-index: 5) */
   background: var(--color-bg-secondary);
 }
 

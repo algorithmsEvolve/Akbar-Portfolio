@@ -50,7 +50,7 @@ export default function StacksSection() {
       <img 
         src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${stack.iconPath}`} 
         alt={stack.name}
-        className={styles.cardIcon}
+        className={`${styles.cardIcon} ${stack.id === "react" || stack.id === "reactnative" || stack.id === "go" || stack.id === "firebase" || stack.id === "github" ? styles.iconDarker : ""}`}
         loading="lazy"
       />
     );
