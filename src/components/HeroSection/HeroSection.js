@@ -45,8 +45,8 @@ export default function HeroSection() {
 
         {/* Description */}
         <p className={styles.description}>
-          Hello, I&apos;m <span className={styles.highlightName}>Akbar Riski</span>, a Web Developer with over 8 years of experience
-          crafting end-to-end web solutions. From intuitive front-end interfaces
+          Hello, I&apos;m <span className={styles.highlightName}>Akbar Riski</span>, a Fullstack Developer with over 8 years of experience
+          crafting end-to-end system or web solutions. From intuitive front-end interfaces
           to powerful back-end systems, I build scalable, efficient, and reliable
           web applications.
         </p>
