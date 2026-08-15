@@ -6,7 +6,7 @@
   position: relative;
   /* No z-index — avoids creating a stacking context that would trap
      contentWrapper (z-index: 10) below the fixed rainbow cursor (z-index: 5) */
-  background: var(--color-bg-secondary);
+  background: transparent;
 }
 
 .header {
@@ -29,13 +29,9 @@
   width: 100vw;
   right: auto;
   bottom: 0px;
-  background: linear-gradient(to bottom,
-    var(--color-bg-secondary) 0%,
-    var(--color-sticky-overlay-mid) 50%,
-    var(--color-sticky-overlay-end) 100%
-  );
-  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  background: transparent;
+  mask-image: none;
+  -webkit-mask-image: none;
   z-index: -1;
   pointer-events: none;
 }
