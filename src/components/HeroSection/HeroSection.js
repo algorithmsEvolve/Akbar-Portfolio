@@ -56,6 +56,27 @@ export default function HeroSection() {
     updateReducedMotion();
     mediaQuery.addEventListener?.("change", updateReducedMotion);
 
+    // iOS Safari won't load/seek video until it's been "kicked" with a
+    // play() call. Muted+playsInline allows autoplay without user gesture.
+    const video = videoRef.current;
+    if (video) {
+      video.load();
+      const kickVideo = () => {
+        if (video.readyState < 2) return;
+        video.play().then(() => {
+          video.pause();
+          video.currentTime = 0;
+        }).catch(() => {
+          // Autoplay blocked — force load anyway so seeking works
+          video.load();
+        });
+        video.removeEventListener("loadeddata", kickVideo);
+      };
+      video.addEventListener("loadeddata", kickVideo);
+      // Fallback: try kick immediately if already loaded
+      if (video.readyState >= 2) kickVideo();
+    }
+
     const getProgress = () => {
       const container = containerRef.current;
       if (!container) return 0;
@@ -142,7 +163,9 @@ export default function HeroSection() {
                 ref={videoRef}
                 className={styles.video}
                 src="/animated_me_firefox.mp4"
+                poster="/images/avatar.png"
                 muted
+                loop
                 playsInline
                 preload="auto"
                 onSeeked={() => { seekingRef.current = false; }}
