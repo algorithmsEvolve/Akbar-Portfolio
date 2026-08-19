@@ -3,41 +3,41 @@
    ======================================== */
 .hero {
   position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: calc(var(--navbar-height) + 10px) var(--section-padding-x) 80px;
-  overflow: hidden;
-  /* No z-index here — avoids creating a stacking context that would trap
-     hero children below the fixed rainbow cursor (z-index: 5) */
+  overflow: visible;
+  /* No overflow:hidden — kills position:sticky inside. Watermark clipped
+     by .watermarkClip wrapper instead. */
 }
 
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 56% 62%, rgba(96, 123, 170, 0.08), transparent 25rem);
-  /* backdrop-filter removed: invisible behind 95% opaque black, was wasting full-screen GPU blur */
-  z-index: 0;  /* Root level: sits below cursor (5) and content (10) */
+  background: radial-gradient(circle at 56% 28%, rgba(96, 123, 170, 0.14), transparent 28rem);
+  z-index: 0;
   pointer-events: none;
 }
 
 /* ========================================
    BACKGROUND WATERMARK
    ======================================== */
+.watermarkClip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: var(--z-watermark);
+}
+
 .watermark {
   position: absolute;
   top: 0;
   right: 0;
   margin-top: -24px;
   transform: scale(-1, -1);
-  z-index: var(--z-watermark);
   display: flex;
   gap: 40px;
   white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
 }
 
 .watermarkText {
@@ -50,32 +50,66 @@
 }
 
 /* ========================================
+   SCROLL SCENE
+   ======================================== */
+.scrollScene {
+  position: relative;
+  min-height: 500vh;
+  /* Firefox scroll anchoring fights the sticky stage — disable it */
+  overflow-anchor: none;
+}
+
+.stickyStage {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  overflow-anchor: none;
+}
+
+.stageInner {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+/* ========================================
    CONTENT
    ======================================== */
 .content {
   position: relative;
-  z-index: 10; /* Keep text and images above rainbow cursor (z-index: 5) */
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   max-width: 940px;
   width: 100%;
+  gap: 18px;
 }
 
 /* ========================================
-   AVATAR
+   AVATAR + LOCATION
    ======================================== */
 .avatarWrapper {
-  margin: 0 auto 20px;
+  position: relative;
+  z-index: 2;
+  margin: 0 auto 4px;
 }
 
 .avatarRing {
-  width: 172px;
-  height: 172px;
+  width: 132px;
+  height: 132px;
   border-radius: 50%;
   padding: 0;
-  border: 2px solid var(--color-accent-blue);
+  border: 1.5px solid rgba(117, 160, 255, 0.46);
+  box-shadow: 0 0 0 1px rgba(117, 160, 255, 0.08), 0 22px 54px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,18 +131,22 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transform: scale(1.15) translateY(4px);
+  transform: scale(1.16) translateY(3px);
 }
 
-/* ========================================
-   LOCATION
-   ======================================== */
 .location {
-  display: flex;
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin: 0 auto 28px;
+  margin: 0 auto 2px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
 }
 
 .locationIcon {
@@ -126,7 +164,110 @@
 }
 
 /* ========================================
-   TAGLINE
+   VIDEO
+   ======================================== */
+.videoFrame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+  border: none;
+  background: radial-gradient(circle at 50% 10%, rgba(94, 133, 220, 0.2), rgba(9, 11, 15, 0.96));
+  box-shadow: none;
+}
+
+.videoFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 8, 15, 0.1), rgba(5, 8, 15, 0.28));
+  pointer-events: none;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Force own compositing layer — Firefox paints the video on the main
+     thread otherwise, which makes scrub seeks visible as stutter */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* ========================================
+   STORY
+   ======================================== */
+.story {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  padding: calc(var(--navbar-height) + 96px) 24px 120px;
+}
+
+.story .content {
+  height: 100%;
+  justify-content: center;
+}
+
+.storyStep {
+  position: absolute;
+  width: min(820px, 100%);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  filter: blur(8px);
+  transition: opacity 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 420ms ease;
+}
+
+.storyStepActive {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.storyEyebrow {
+  margin: 0 0 10px;
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(234, 242, 255, 0.76);
+}
+
+.storyTitle {
+  margin: 0;
+  font-size: clamp(38px, 6.4vw, 84px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  color: #f7fbff;
+  text-wrap: balance;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.28);
+}
+
+.storyDesc {
+  margin: 18px auto 0;
+  width: min(460px, 100%);
+  font-size: clamp(15px, 1.9vw, 20px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  color: rgba(231, 237, 246, 0.82);
+  text-wrap: balance;
+}
+
+/* ========================================
+   [DISABLED] STATIC HERO TYPOGRAPHY
+   Kept for rollback reference. Not used by active JSX.
    ======================================== */
 .tagline {
   font-size: clamp(42px, 6vw, 76px);
@@ -150,9 +291,6 @@
   color: var(--color-accent-blue);
 }
 
-/* ========================================
-   DESCRIPTION
-   ======================================== */
 .description {
   font-size: 17px;
   line-height: 1.75;
@@ -175,21 +313,30 @@
 /* ========================================
    RESPONSIVE
    ======================================== */
+@media (max-width: 1024px) {
+  .scrollScene {
+    min-height: 460vh;
+  }
+
+  .story {
+    padding-top: calc(var(--navbar-height) + 112px);
+  }
+}
+
 @media (max-width: 768px) {
-  .hero {
-    padding-top: 104px;
-    padding-bottom: 80px;
+  .scrollScene {
+    min-height: 420vh;
+  }
+
+  .stickyStage {
+    padding: 0;
     min-height: 100svh;
   }
 
-  .avatarRing {
-    width: 140px;
-    height: 140px;
-  }
-
-  .avatarImage {
-    width: 132px;
-    height: 132px;
+  .content {
+    gap: 14px;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .watermark {
@@ -202,71 +349,108 @@
     font-size: clamp(60px, 16vw, 120px);
   }
 
-  .content {
-    align-items: center;
-    text-align: center;
-    min-width: 0;
-  }
-
-  .taglineAccent {
-    padding-left: 0;
-  }
-
-  .description {
-    margin-left: 0;
-  }
-
-  .tagline {
-    font-size: clamp(36px, 10vw, 56px);
-  }
-
-  .description {
-    font-size: 14px;
-    padding: 0;
-    max-width: 100%;
+  .avatarRing {
+    width: 112px;
+    height: 112px;
+    box-shadow: 0 0 0 1px rgba(117, 160, 255, 0.08), 0 18px 42px rgba(0, 0, 0, 0.24);
   }
 
   .location {
-    margin-bottom: 24px;
+    padding: 7px 12px;
+  }
+
+  .locationText {
+    font-size: 13px;
+  }
+
+  .videoFrame {
+    width: 100%;
+  }
+
+  .story {
+    padding: 112px 18px 88px;
+  }
+
+  .storyStep {
+    width: min(100%, 540px);
+  }
+
+  .storyEyebrow {
+    margin-bottom: 8px;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+  }
+
+  .storyTitle {
+    font-size: clamp(30px, 9.8vw, 54px);
+    line-height: 0.96;
+  }
+
+  .storyDesc {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.42;
+    width: min(320px, 100%);
   }
 }
 
 @media (max-width: 480px) {
-  .hero {
-    padding-left: 16px;
-    padding-right: 16px;
+  .scrollScene {
+    min-height: 390vh;
+  }
+
+  .stickyStage {
+    padding: 0;
   }
 
   .avatarRing {
-    width: 120px;
-    height: 120px;
+    width: 96px;
+    height: 96px;
   }
 
-  .avatarImage {
-    width: 112px;
-    height: 112px;
+  .videoFrame {
+    border-radius: 0;
   }
 
-  .tagline {
-    font-size: clamp(28px, 8.5vw, 34px);
-    margin-bottom: 20px;
-    width: calc(100vw - 32px);
-    max-width: calc(100vw - 32px);
-    overflow: visible;
-    overflow-wrap: normal;
-    word-break: normal;
+  .story {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 80px;
   }
 
-  .taglineBold,
-  .taglineAccent {
-    width: 100%;
-    max-width: 100%;
-    white-space: normal;
+  .storyTitle {
+    font-size: clamp(28px, 8.5vw, 42px);
   }
 
-  .description {
+  .storyDesc {
+    width: min(280px, 100%);
     font-size: 13px;
-    line-height: 1.7;
-    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollScene {
+    min-height: 100svh;
+  }
+
+  .storyStep,
+  .storyStepActive {
+    position: relative;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .story {
+    position: relative;
+    inset: auto;
+    padding: 16px 0 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .videoFrame::after {
+    background: linear-gradient(180deg, rgba(5, 8, 15, 0.06), rgba(5, 8, 15, 0.16));
   }
 }
