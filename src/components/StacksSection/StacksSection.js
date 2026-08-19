@@ -63,19 +63,18 @@ export default function StacksSection() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Background network effects */}
+      {/* ─── [DISABLED] Background network image layers — removed so the
+          global background shows through ───
       <div className={styles.bgEffects}>
         <div className={styles.glowBlob} />
         
         <div className={styles.cloudWrapper}>
-          {/* Dim base layer (static relative position to give wrapper height) */}
           <img 
             src="/images/stacks-bg-transparent.png" 
             alt="" 
             className={styles.cloudBg} 
           />
           
-          {/* Spreading electric highlight layer (absolute positioned on top) */}
           <img 
             src="/images/stacks-bg-transparent.png" 
             alt="Network Connections" 
@@ -83,6 +82,7 @@ export default function StacksSection() {
           />
         </div>
       </div>
+      ─── [/DISABLED] ─── */}
 
       <div className={styles.header}>
         <p className={styles.subtitle}>Built With Precision</p>

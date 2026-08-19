@@ -5,7 +5,8 @@
   flex-direction: column;
   align-items: center;
   z-index: 2;
-  background: var(--color-bg-primary);
+  /* ─── [DISABLED] background: var(--color-bg-primary);
+     removed so global background shows through ─── */
 }
 
 .header {
@@ -138,14 +139,9 @@
   filter: invert(1) grayscale(0%) opacity(1) brightness(1.5);
 }
 
-/* Background Network Effect */
+/* Background network effect disabled; global background remains visible. */
 .bgEffects {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-  background: var(--color-bg-primary);
+  display: none;
 }
 
 .glowBlob {
