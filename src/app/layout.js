@@ -35,13 +35,16 @@ export const metadata = {
   },
 };
 
-const themeInit = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");}catch(e){document.documentElement.setAttribute("data-theme","light");}})();`;
+// Inline script MUST be before any other <head> children so the browser applies
+// data-theme before parsing global.css — eliminates FOUC / light-flash on load.
+const themeInitScript = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`;
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        {/* Critical: apply theme BEFORE global.css is fetched/parsed */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className={poppins.variable}>
         <Preloader />

@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #f7f8fa;
+  background-color: #10141b; /* dark default — matches :root[data-theme="dark"] */
   z-index: 9999999;
   display: flex;
   flex-direction: column;
@@ -13,6 +13,15 @@
   transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1), transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
   opacity: 1;
   pointer-events: none;
+}
+
+/* Follow theme once data-theme is applied by the inline head script */
+:global(html[data-theme="light"]) .preloaderContainer {
+  background-color: #f7f8fa;
+}
+
+:global(html[data-theme="light"]) .progressText {
+  color: rgba(41, 45, 52, 0.5);
 }
 
 .fadeOut {
@@ -144,7 +153,7 @@
 }
 
 .progressText {
-  color: rgba(41, 45, 52, 0.5);
+  color: rgba(255, 255, 255, 0.55);
   font-size: 11px;
   letter-spacing: 0.3em;
   font-weight: 500;
