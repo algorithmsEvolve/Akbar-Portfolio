@@ -32,9 +32,9 @@ export const PROJECTS = [
   {
     id: "project-2",
     title: "SIRAPTOR",
-    description: "A comprehensive 'Super App' re-engineering internal operations for Pertamina branches across Indonesia. Siraptor automates role-based assignments and role-specific workflows through enterprise-grade monitoring dashboards. It serves as a centralized productivity hub, featuring a sophisticated communication engine with personal, group, and Discord-style channel chats, integrated seamlessly with interactive Kanban boards for high-velocity task management.",
+    description: "A comprehensive 'Super App' re-engineering internal operations for PT. PLN (Perusahaan Listrik Negara) branches across Indonesia. Siraptor automates role-based assignments and role-specific workflows through enterprise-grade monitoring dashboards. It serves as a centralized productivity hub, featuring a sophisticated communication engine with personal, group, and Discord-style channel chats, integrated seamlessly with interactive Kanban boards for high-velocity task management.",
     highlights: [
-      "Nationwide Pertamina Internal Deployment",
+      "Nationwide PLN Internal Deployment",
       "Real-Time Cross-Branch Data Monitoring",
       "Discord-Style Advanced Chat Engine",
       "Interactive Kanban Task Orchestration",
